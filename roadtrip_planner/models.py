@@ -113,7 +113,16 @@ class RoadEvent:
 
     @property
     def total_cost(self) -> float:
-        return self.fuel_cost + self.toll_cost + self.other_cost
+        cb = self.cost_breakdown or {}
+        accommodation = float(cb.get("accommodation", 0) or 0)
+        food = float(cb.get("food", 0) or 0)
+        ticket = float(cb.get("ticket", 0) or 0)
+        parking = float(cb.get("parking", 0) or 0)
+        breakdown_other = float(cb.get("other", 0) or 0)
+        return round(
+            self.fuel_cost + self.toll_cost + self.other_cost
+            + accommodation + food + ticket + parking + breakdown_other, 2
+        )
 
     def to_dict(self) -> Dict[str, Any]:
         d = {

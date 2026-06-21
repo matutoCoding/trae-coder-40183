@@ -172,15 +172,6 @@ COST_CATEGORY_RULES = {
             r'(?:住宿|酒店|民宿|客栈|房费)\s*[:：]?\s*(\d+(?:\.\d+)?)\s*元',
         ]
     },
-    "food_cost": {
-        "keywords": ["午餐", "晚餐", "早餐", "吃饭", "餐厅", "餐馆", "火锅", "汤锅", "土菜", "烧烤"],
-        "patterns": [
-            r'(\d+(?:\.\d+)?)\s*元\s*(?:\/|每)?\s*人(?:均)?',
-            r'(?:人均|每人)\s*[:：]?\s*(\d+(?:\.\d+)?)',
-            r'(?:午餐|晚餐|早餐|吃饭|餐厅)\s*[:：]?\s*(\d+(?:\.\d+)?)\s*元',
-            r'(\d+(?:\.\d+)?)\s*元\s*(?:午餐|晚餐|早餐|吃饭|餐厅)',
-        ]
-    },
     "ticket_cost": {
         "keywords": ["门票", "观光车", "景区票", "入园", "套票"],
         "patterns": [
@@ -194,6 +185,15 @@ COST_CATEGORY_RULES = {
         "patterns": [
             r'停车费\s*[:：]?\s*(\d+(?:\.\d+)?)\s*元',
             r'(\d+(?:\.\d+)?)\s*元\s*停车费',
+        ]
+    },
+    "food_cost": {
+        "keywords": ["午餐", "晚餐", "早餐", "吃饭", "餐厅", "餐馆", "火锅", "汤锅", "土菜", "烧烤"],
+        "patterns": [
+            r'(?:午餐|晚餐|早餐|吃饭|餐厅)\s*[:：]?\s*(\d+(?:\.\d+)?)\s*元',
+            r'(\d+(?:\.\d+)?)\s*元\s*(?:午餐|晚餐|早餐|吃饭|餐厅)',
+            r'(?:人均|每人)\s*[:：]?\s*(\d+(?:\.\d+)?)',
+            r'(\d+(?:\.\d+)?)\s*元\s*(?:\/|每)\s*人(?:均)?',
         ]
     },
 }
@@ -218,31 +218,49 @@ def extract_costs(text: str, context_tags: Optional[List[str]] = None) -> Dict[s
     if not text:
         return result
     context_tags = context_tags or []
+    used_amount_spans: List[Tuple[int, int]] = []
 
-    per_person_m = re.search(r'(?:人均|每人)\s*[:：]?\s*(\d+(?:\.\d+)?)', text)
-    if per_person_m:
-        result["per_person"] = float(per_person_m.group(1))
+    def _is_span_used(start: int, end: int, exclude_per_person: bool = False) -> bool:
+        for us, ue in used_amount_spans:
+            if not (end <= us or start >= ue):
+                return True
+        return False
 
     for category, rule in COST_CATEGORY_RULES.items():
         matched_amounts = []
         evidence = []
+        used_for_this = []
         for pattern in rule["patterns"]:
             for m in re.finditer(pattern, text):
                 try:
                     amt = float(m.group(1))
+                    amt_span = m.span(1)
+                    if _is_span_used(*amt_span):
+                        continue
                     matched_amounts.append(amt)
                     evidence.append(m.group(0))
+                    used_for_this.append(amt_span)
                 except (ValueError, IndexError):
                     continue
         if not matched_amounts:
             for kw in rule["keywords"]:
-                if kw in text:
-                    generic = re.search(r'(\d+(?:\.\d+)?)\s*元', text)
-                    if generic:
-                        amt = float(generic.group(1))
-                        matched_amounts.append(amt)
-                        evidence.append(f"{kw}: {generic.group(0)}")
-                        break
+                kw_idx = text.find(kw)
+                if kw_idx < 0:
+                    continue
+                window_start = max(0, kw_idx - 12)
+                window_end = min(len(text), kw_idx + len(kw) + 12)
+                window = text[window_start:window_end]
+                near_match = re.search(r'(\d+(?:\.\d+)?)\s*元', window)
+                if near_match:
+                    amt = float(near_match.group(1))
+                    abs_span = (window_start + near_match.span(1)[0],
+                                window_start + near_match.span(1)[1])
+                    if _is_span_used(*abs_span):
+                        continue
+                    matched_amounts.append(amt)
+                    evidence.append(f"{kw}: {near_match.group(0)}")
+                    used_for_this.append(abs_span)
+                    break
         if matched_amounts:
             amount = max(matched_amounts)
             result[category] = round(amount, 2)
@@ -251,11 +269,15 @@ def extract_costs(text: str, context_tags: Optional[List[str]] = None) -> Dict[s
                 "amount": amount,
                 "evidence": evidence[0],
             })
+            for span in used_for_this:
+                used_amount_spans.append(span)
 
     generic_amounts = []
     for m in re.finditer(r'(\d+(?:\.\d+)?)\s*元', text):
         amt = float(m.group(1))
         if amt <= 0:
+            continue
+        if _is_span_used(m.span(1)[0], m.span(1)[1]):
             continue
         matched = False
         for rec in result["matches"]:
@@ -288,16 +310,23 @@ def extract_costs(text: str, context_tags: Optional[List[str]] = None) -> Dict[s
             for m in re.finditer(r'(\d+(?:\.\d+)?)', text):
                 try:
                     amt = float(m.group(1))
-                    if 10 <= amt <= 100000:
+                    if 10 <= amt <= 100000 and not _is_span_used(m.span(1)[0], m.span(1)[1]):
                         result[tag_category_map[tag]] = round(amt, 2)
                         result["matches"].append({
                             "category": tag_category_map[tag],
                             "amount": amt,
                             "evidence": f"#{tag} 关联金额: {amt}",
                         })
+                        used_amount_spans.append(m.span(1))
                         break
                 except ValueError:
                     continue
+
+    if result["per_person"] is None:
+        per_person_m = re.search(r'(?:人均|每人)\s*[:：]?\s*(\d+(?:\.\d+)?)', text)
+        if per_person_m:
+            result["per_person"] = float(per_person_m.group(1))
+
     return result
 
 

@@ -897,19 +897,45 @@ class RoadbookAssembler:
                 cost_bd_total[k] += d.cost_breakdown.get(k, 0.0)
         photo_spots = []
         all_events = [e for d in days for e in d.events]
+        GENERIC_TITLES = {"拍照打卡", "拍照", "观景", "观景停留", "下午观景停留",
+                          "上午观景停留", "傍晚观景停留", "路边停留", "临时停车"}
+        named_destinations = [d for d in self.destinations if d.latitude is not None and d.longitude is not None]
+
+        def _resolve_spot_name(event: RoadEvent) -> str:
+            if event.title and event.title not in GENERIC_TITLES:
+                return event.title
+            if event.latitude is not None and event.longitude is not None and named_destinations:
+                best = None
+                best_dist = float("inf")
+                for d in named_destinations:
+                    dist = haversine_distance(event.latitude, event.longitude, d.latitude, d.longitude)
+                    if dist < best_dist:
+                        best_dist = dist
+                        best = d
+                if best is not None and best_dist < 50:
+                    return best.name
+            if event.title:
+                return event.title
+            return "观景停留"
+
         for e in all_events:
             if e.event_type in (EventType.SCENIC_STOP, EventType.PHOTO) or len(e.photos) >= 1:
                 grade = "S" if len(e.photos) >= 4 or "必去" in (e.description or "") \
                               or "强烈推荐" in (e.description or "") else (
                          "A" if len(e.photos) >= 2 or "推荐" in (e.description or "") else "B")
+                cb = e.cost_breakdown or {}
                 photo_spots.append({
-                    "name": e.title,
+                    "name": _resolve_spot_name(e),
+                    "level": grade,
                     "day": next((d.day_index for d in days if e in d.events), 0),
                     "time": e.timestamp.strftime("%H:%M") if e.timestamp else "",
                     "latitude": e.latitude,
                     "longitude": e.longitude,
                     "photo_count": len(e.photos),
                     "grade": grade,
+                    "tickets": cb.get("ticket") if isinstance(cb.get("ticket"), (int, float)) else None,
+                    "parking_fee": cb.get("parking") if isinstance(cb.get("parking"), (int, float)) else None,
+                    "stay_minutes": int(e.duration_minutes) if e.duration_minutes else None,
                     "highlights": e.highlights[:3],
                     "tips": e.pitfalls[:2],
                 })
