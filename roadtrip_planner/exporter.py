@@ -903,19 +903,36 @@ tr:hover td {{ background:#f8fafc; }}
             if spots:
                 items_html = ""
                 for s in spots[:12]:
-                    level = s.get("level", "B")
-                    title = s.get("title", "拍照点")
+                    level = s.get("level") or s.get("grade") or "B"
+                    title = s.get("name") or s.get("title") or "拍照点"
                     meta_parts = []
-                    if s.get("ticket"):
-                        meta_parts.append(f"🎫 门票¥{s['ticket']}")
-                    if s.get("parking"):
-                        meta_parts.append(f"🅿 停车¥{s['parking']}")
-                    if s.get("stay_minutes"):
-                        meta_parts.append(f"⏱ 建议停留{s['stay_minutes']}分钟")
-                    if s.get("highlight"):
-                        meta_parts.append(f"✨ {s['highlight']}")
+                    tickets = s.get("tickets") or s.get("ticket") or 0
+                    parking = s.get("parking_fee") or s.get("parking") or 0
+                    stay = s.get("stay_minutes") or 0
+                    if tickets and tickets > 0:
+                        meta_parts.append(f"🎫 门票 ¥{tickets:.0f}")
+                    if parking and parking > 0:
+                        meta_parts.append(f"🅿 停车 ¥{parking:.0f}")
+                    if stay and stay > 0:
+                        hours = stay // 60
+                        mins = stay % 60
+                        if hours and mins:
+                            meta_parts.append(f"⏱ 建议停留 {hours}小时{mins}分钟")
+                        elif hours:
+                            meta_parts.append(f"⏱ 建议停留 {hours}小时")
+                        else:
+                            meta_parts.append(f"⏱ 建议停留 {mins}分钟")
+                    highlights = s.get("highlights") or []
+                    if highlights:
+                        h = highlights[0]
+                        h_clean = h.split("#")[0].strip() if "#" in h else h.strip()
+                        if len(h_clean) > 26:
+                            h_clean = h_clean[:24] + "…"
+                        if h_clean:
+                            meta_parts.append(f"✨ {h_clean}")
                     meta = "<br>".join(meta_parts) or "—"
-                    items_html += f"""<div class="photo-item"><div class="plevel {level}">{'★' * (3 if level == 'S' else 2 if level == 'A' else 1)} {level}级</div><div class="ptitle">{title}</div><div class="pmeta">{meta}</div></div>"""
+                    stars = "★★★" if level == "S" else ("★★☆" if level == "A" else "★☆☆")
+                    items_html += f"""<div class="photo-item"><div class="plevel {level}">{stars} {level}级</div><div class="ptitle">{title}</div><div class="pmeta">{meta}</div></div>"""
                 budget_table = rb.meta.get("guide_budget_table") if hasattr(rb, "meta") else None
                 budget_extra = ""
                 if budget_table:
