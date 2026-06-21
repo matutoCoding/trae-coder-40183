@@ -3,6 +3,7 @@ import os
 import re
 import csv
 import logging
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import List, Optional, Dict, Tuple, Any
 from pathlib import Path
@@ -12,7 +13,10 @@ from .models import (
 )
 from .utils import (
     haversine_distance, parse_datetime, generate_event_id, classify_time_of_day,
-    extract_tags_from_text, clean_text
+    extract_tags_from_text, clean_text,
+    extract_costs, cost_breakdown_to_fields,
+    build_mileage_timeline, lookup_cumulative_mileage,
+    categorize_pitfall, ensure_dir, save_json
 )
 
 logger = logging.getLogger(__name__)
@@ -592,6 +596,7 @@ class RoadbookAssembler:
         if not self.waypoints:
             raise ValueError("GPS 轨迹为空，无法构建路书")
         segments = self.segmenter.segment(self.waypoints)
+        mileage_timeline = build_mileage_timeline(segments)
         events = []
         cumulative_km = 0.0
         covered_note_contents = set()
@@ -609,7 +614,8 @@ class RoadbookAssembler:
                     lat=seg["start_lat"], lon=seg["start_lon"],
                     duration=int(seg["duration"]), distance=dist,
                     cumulative=cumulative_km, avg_speed=seg["avg_speed"],
-                    photos=seg_photos, notes=seg_notes, end_lat=seg["end_lat"], end_lon=seg["end_lon"]
+                    photos=seg_photos, notes=seg_notes, end_lat=seg["end_lat"], end_lon=seg["end_lon"],
+                    mileage_timeline=mileage_timeline
                 )
             else:
                 etype, title = self.classifier.classify_stop(seg, seg_photos, seg_notes, self.destinations)
@@ -617,11 +623,13 @@ class RoadbookAssembler:
                     timestamp=seg["start_time"], etype=etype, title=title,
                     lat=seg["start_lat"], lon=seg["start_lon"],
                     duration=int(seg["duration"]), distance=0,
-                    cumulative=cumulative_km, photos=seg_photos, notes=seg_notes
+                    cumulative=cumulative_km, photos=seg_photos, notes=seg_notes,
+                    mileage_timeline=mileage_timeline
                 )
             events.append(evt)
         orphan_photos = [p for p in self.photos if not any(p in e.photos for e in events)]
         for p in orphan_photos:
+            km_orphan = lookup_cumulative_mileage(mileage_timeline, p.timestamp)
             events.append(RoadEvent(
                 event_id=generate_event_id("photo"),
                 timestamp=p.timestamp or datetime.now(),
@@ -630,11 +638,25 @@ class RoadbookAssembler:
                 description=p.description,
                 latitude=p.latitude, longitude=p.longitude,
                 photos=[p],
-                cumulative_km=cumulative_km,
+                cumulative_km=round(km_orphan, 2),
+                highlights=[p.description] if p.description else [],
             ))
         orphan_notes = [n for n in self.notes if id(n) not in covered_note_contents]
         for n in orphan_notes:
             etype, title = self.classifier.classify_from_note(n)
+            costs = extract_costs(n.content, n.tags)
+            cb = cost_breakdown_to_fields(costs)
+            pitfall_list = self._extract_pitfalls(n.content)
+            pit_cats = list(dict.fromkeys(categorize_pitfall(p) for p in pitfall_list))
+            km_orphan = lookup_cumulative_mileage(mileage_timeline, n.timestamp)
+            rating = None
+            for m in re.finditer(r'(\d+(?:\.\d+)?)\s*分', n.content):
+                try:
+                    s = int(float(m.group(1)))
+                    if 1 <= s <= 5:
+                        rating = s
+                except ValueError:
+                    pass
             events.append(RoadEvent(
                 event_id=generate_event_id(etype.value),
                 timestamp=n.timestamp or datetime.now(),
@@ -642,9 +664,15 @@ class RoadbookAssembler:
                 title=title,
                 description=n.content,
                 tags=n.tags,
-                cumulative_km=cumulative_km,
-                pitfalls=self._extract_pitfalls(n.content),
+                cumulative_km=round(km_orphan, 2),
+                fuel_cost=round(costs.get("fuel_cost", 0.0), 2),
+                toll_cost=round(costs.get("toll_cost", 0.0), 2),
+                other_cost=round(cb["other_cost"], 2),
+                cost_breakdown=cb["_breakdown"],
+                pitfalls=pitfall_list,
+                pitfall_categories=pit_cats,
                 highlights=self._extract_highlights(n.content),
+                rating=rating,
             ))
         events.sort(key=lambda e: e.timestamp or datetime.min)
         self._mark_departure(events)
@@ -671,12 +699,20 @@ class RoadbookAssembler:
 
     def _make_event(self, timestamp, etype, title, lat, lon, duration, distance,
                     cumulative, avg_speed=None, photos=None, notes=None,
-                    end_lat=None, end_lon=None):
+                    end_lat=None, end_lon=None, mileage_timeline=None):
         description_parts = []
         tags = []
         pitfalls = []
+        pitfall_categories = []
         highlights = []
         rating = None
+        road_condition_score = None
+        driving_difficulty = None
+        total_fuel = 0.0
+        total_toll = 0.0
+        total_other = 0.0
+        cost_breakdown = {"accommodation": 0.0, "food": 0.0, "ticket": 0.0,
+                         "parking": 0.0, "other": 0.0, "per_person": None}
         for n in (notes or []):
             description_parts.append(n.content)
             tags.extend(n.tags)
@@ -684,14 +720,56 @@ class RoadbookAssembler:
             for kw in ["坑", "避坑", "注意", "警告", "别", "不要", "小心"]:
                 if kw in content:
                     pitfalls.append(content)
+                    cat = categorize_pitfall(content)
+                    if cat not in pitfall_categories:
+                        pitfall_categories.append(cat)
                     break
             for kw in ["推荐", "值得", "必去", "太美", "惊喜", "震撼"]:
                 if kw in content:
                     highlights.append(content)
                     break
+            costs = extract_costs(content, n.tags)
+            total_fuel += costs.get("fuel_cost", 0.0)
+            total_toll += costs.get("toll_cost", 0.0)
+            mapped = cost_breakdown_to_fields(costs)
+            total_other += mapped["other_cost"]
+            for k in ["accommodation", "food", "ticket", "parking", "other"]:
+                cost_breakdown[k] += mapped["_breakdown"].get(k, 0.0)
+            if cost_breakdown["per_person"] is None:
+                cost_breakdown["per_person"] = costs.get("per_person")
+            for m in re.finditer(r'(\d+(?:\.\d+)?)\s*分', content):
+                try:
+                    score = int(float(m.group(1)))
+                    if 1 <= score <= 5:
+                        rating = score
+                except ValueError:
+                    pass
         description = "\n\n".join(description_parts)
-        if etype == EventType.DRIVING and end_lat is not None:
-            pass
+        if etype in (EventType.DRIVING, EventType.DEPARTURE, EventType.TRAFFIC_JAM):
+            if avg_speed is not None:
+                if avg_speed >= 60:
+                    road_condition_score = 5
+                    driving_difficulty = "简单"
+                elif avg_speed >= 40:
+                    road_condition_score = 4
+                    driving_difficulty = "简单"
+                elif avg_speed >= 25:
+                    road_condition_score = 3
+                    driving_difficulty = "中等"
+                elif avg_speed >= 15:
+                    road_condition_score = 2
+                    driving_difficulty = "困难"
+                else:
+                    road_condition_score = 1
+                    driving_difficulty = "地狱"
+            if etype == EventType.TRAFFIC_JAM:
+                road_condition_score = max(1, (road_condition_score or 3) - 2)
+                if "修路" in description or "烂路" in description:
+                    driving_difficulty = "困难"
+                    road_condition_score = 1
+        km_at_start = cumulative
+        if mileage_timeline and timestamp:
+            km_at_start = lookup_cumulative_mileage(mileage_timeline, timestamp)
         return RoadEvent(
             event_id=generate_event_id(etype.value),
             timestamp=timestamp or datetime.now(),
@@ -701,13 +779,20 @@ class RoadbookAssembler:
             latitude=lat, longitude=lon,
             duration_minutes=duration,
             distance_km=round(distance, 2),
-            cumulative_km=round(cumulative, 2),
+            cumulative_km=round(km_at_start, 2),
             avg_speed=round(avg_speed, 1) if avg_speed else None,
+            fuel_cost=round(total_fuel, 2),
+            toll_cost=round(total_toll, 2),
+            other_cost=round(total_other, 2),
+            cost_breakdown={k: (round(v, 2) if isinstance(v, float) else v) for k, v in cost_breakdown.items()},
             photos=photos or [],
             tags=list(dict.fromkeys(tags)),
             pitfalls=pitfalls,
+            pitfall_categories=pitfall_categories,
             highlights=highlights,
             rating=rating,
+            road_condition_score=road_condition_score,
+            driving_difficulty=driving_difficulty,
         )
 
     def _photos_in_range(self, start, end) -> List[Photo]:
@@ -752,13 +837,34 @@ class RoadbookAssembler:
             total_km = 0.0
             total_cost = 0.0
             total_dur = 0.0
+            photo_count = 0
+            cost_bd = {"fuel": 0.0, "toll": 0.0, "accommodation": 0.0,
+                       "food": 0.0, "ticket": 0.0, "parking": 0.0, "other": 0.0}
+            diff_counter = {"简单": 0, "中等": 0, "困难": 0, "地狱": 0}
             for e in evts:
-                if e.event_type == EventType.DRIVING or e.event_type == EventType.TRAFFIC_JAM or e.event_type == EventType.DEPARTURE:
+                if e.event_type in (EventType.DRIVING, EventType.TRAFFIC_JAM, EventType.DEPARTURE):
                     total_km += e.distance_km
                 total_cost += e.total_cost
                 total_dur += e.duration_minutes
+                photo_count += len(e.photos)
+                cost_bd["fuel"] += e.fuel_cost
+                cost_bd["toll"] += e.toll_cost
+                bd = e.cost_breakdown or {}
+                cost_bd["accommodation"] += bd.get("accommodation", 0.0)
+                cost_bd["food"] += bd.get("food", 0.0)
+                cost_bd["ticket"] += bd.get("ticket", 0.0)
+                cost_bd["parking"] += bd.get("parking", 0.0)
+                cost_bd["other"] += bd.get("other", 0.0)
+                if e.driving_difficulty in diff_counter:
+                    diff_counter[e.driving_difficulty] += 1
             start = evts[0].title if evts else ""
             end = evts[-1].title if evts else ""
+            difficulty_avg = None
+            if sum(diff_counter.values()) > 0:
+                for k in ["地狱", "困难", "中等", "简单"]:
+                    if diff_counter[k] > 0:
+                        difficulty_avg = k
+                        break
             summary = f"{date_str}: 行驶 {total_km:.1f} 公里，耗时 {total_dur/60:.1f} 小时，费用 {total_cost:.0f} 元"
             days.append(DayPlan(
                 day_index=idx,
@@ -771,6 +877,9 @@ class RoadbookAssembler:
                 total_distance_km=round(total_km, 1),
                 total_duration_hours=round(total_dur / 60, 1),
                 total_cost=round(total_cost, 2),
+                cost_breakdown={k: round(v, 2) for k, v in cost_bd.items()},
+                photo_count=photo_count,
+                driving_difficulty_avg=difficulty_avg,
             ))
         return days
 
@@ -781,6 +890,65 @@ class RoadbookAssembler:
         end_date = days[-1].date if days else ""
         dest_names = " → ".join(d.name for d in self.destinations) if self.destinations else ""
         title = dest_names or f"自驾路书 {start_date} 至 {end_date}"
+        cost_bd_total = {"fuel": 0.0, "toll": 0.0, "accommodation": 0.0,
+                         "food": 0.0, "ticket": 0.0, "parking": 0.0, "other": 0.0}
+        for d in days:
+            for k in cost_bd_total:
+                cost_bd_total[k] += d.cost_breakdown.get(k, 0.0)
+        photo_spots = []
+        all_events = [e for d in days for e in d.events]
+        for e in all_events:
+            if e.event_type in (EventType.SCENIC_STOP, EventType.PHOTO) or len(e.photos) >= 1:
+                grade = "S" if len(e.photos) >= 4 or "必去" in (e.description or "") \
+                              or "强烈推荐" in (e.description or "") else (
+                         "A" if len(e.photos) >= 2 or "推荐" in (e.description or "") else "B")
+                photo_spots.append({
+                    "name": e.title,
+                    "day": next((d.day_index for d in days if e in d.events), 0),
+                    "time": e.timestamp.strftime("%H:%M") if e.timestamp else "",
+                    "latitude": e.latitude,
+                    "longitude": e.longitude,
+                    "photo_count": len(e.photos),
+                    "grade": grade,
+                    "highlights": e.highlights[:3],
+                    "tips": e.pitfalls[:2],
+                })
+        photo_spots.sort(key=lambda x: {"S": 0, "A": 1, "B": 2}.get(x["grade"], 3))
+        pitfalls_by_category: Dict[str, List[str]] = {
+            "费用坑": [], "路况坑": [], "住宿坑": [], "餐饮坑": [], "拍照坑": [], "其他坑": []
+        }
+        for e in all_events:
+            for p in e.pitfalls:
+                cat = categorize_pitfall(p)
+                pitfalls_by_category.setdefault(cat, []).append(p)
+        pitfalls_by_category = {k: list(dict.fromkeys(v)) for k, v in pitfalls_by_category.items() if v}
+        road_scores: Dict[str, Any] = {
+            "overall_avg": 0.0,
+            "segment_count": 0,
+            "difficulty_distribution": {"简单": 0, "中等": 0, "困难": 0, "地狱": 0},
+            "by_day": {},
+            "traffic_jam_count": 0,
+            "traffic_jam_minutes": 0,
+        }
+        total_score = 0.0
+        scored_segments = 0
+        for d in days:
+            day_scores = []
+            for e in d.events:
+                if e.event_type in (EventType.DRIVING, EventType.DEPARTURE, EventType.TRAFFIC_JAM):
+                    if e.road_condition_score is not None:
+                        total_score += e.road_condition_score
+                        scored_segments += 1
+                        day_scores.append(e.road_condition_score)
+                    if e.driving_difficulty in road_scores["difficulty_distribution"]:
+                        road_scores["difficulty_distribution"][e.driving_difficulty] += 1
+                    if e.event_type == EventType.TRAFFIC_JAM:
+                        road_scores["traffic_jam_count"] += 1
+                        road_scores["traffic_jam_minutes"] += e.duration_minutes
+            if day_scores:
+                road_scores["by_day"][d.day_index] = round(sum(day_scores) / len(day_scores), 2)
+        road_scores["overall_avg"] = round(total_score / scored_segments, 2) if scored_segments > 0 else 0
+        road_scores["segment_count"] = scored_segments
         return Roadbook(
             title=title,
             created_at=datetime.now(),
@@ -789,9 +957,16 @@ class RoadbookAssembler:
             total_days=len(days),
             total_distance_km=round(total_km, 1),
             total_cost=round(total_cost, 2),
+            cost_breakdown={k: round(v, 2) for k, v in cost_bd_total.items()},
             destinations=self.destinations,
             days=days,
-            meta={"source": "roadtrip-planner v0.1.0"},
+            photo_spots=photo_spots,
+            pitfalls_by_category=pitfalls_by_category,
+            road_scores=road_scores,
+            meta={"source": "roadtrip-planner v0.2.0",
+                  "total_waypoints": len(self.waypoints),
+                  "total_photos": len(self.photos),
+                  "total_notes": len(self.notes)},
         )
 
 
@@ -808,3 +983,207 @@ def import_materials(destinations_file: str = "", gps_file: str = "",
                 f"{len(photos)} 张照片, {len(notes)} 条备注")
     assembler = RoadbookAssembler(destinations, waypoints, photos, notes)
     return assembler.build()
+
+
+# ---------------------------------------------------------------------------
+# 素材预检模块
+# ---------------------------------------------------------------------------
+
+@dataclass
+class PrecheckReport:
+    """素材预检报告"""
+    destinations_count: int = 0
+    destinations_details: List[Dict[str, Any]] = field(default_factory=list)
+    gps_points_count: int = 0
+    gps_date_range: Optional[Tuple[str, str]] = None
+    gps_estimated_km: float = 0.0
+    photos_total: int = 0
+    photos_with_timestamp: int = 0
+    photos_with_gps: int = 0
+    photos_missing_timestamp: List[str] = field(default_factory=list)
+    notes_total: int = 0
+    notes_with_timestamp: int = 0
+    notes_without_timestamp: List[str] = field(default_factory=list)
+    notes_unmatched_to_gps: List[Dict[str, Any]] = field(default_factory=list)
+    cost_matches_preview: List[Dict[str, Any]] = field(default_factory=list)
+    warnings: List[str] = field(default_factory=list)
+    summary: str = ""
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "destinations_count": self.destinations_count,
+            "destinations_details": self.destinations_details,
+            "gps_points_count": self.gps_points_count,
+            "gps_date_range": list(self.gps_date_range) if self.gps_date_range else None,
+            "gps_estimated_km": self.gps_estimated_km,
+            "photos_total": self.photos_total,
+            "photos_with_timestamp": self.photos_with_timestamp,
+            "photos_with_gps": self.photos_with_gps,
+            "photos_missing_timestamp": self.photos_missing_timestamp,
+            "notes_total": self.notes_total,
+            "notes_with_timestamp": self.notes_with_timestamp,
+            "notes_without_timestamp": self.notes_without_timestamp,
+            "notes_unmatched_to_gps": self.notes_unmatched_to_gps,
+            "cost_matches_preview": self.cost_matches_preview,
+            "warnings": self.warnings,
+            "summary": self.summary,
+        }
+
+    def to_text(self) -> str:
+        lines = []
+        lines.append("=" * 60)
+        lines.append("  🚗 路书素材预检报告")
+        lines.append("=" * 60)
+        lines.append("")
+        lines.append(f"📋 概览: {self.summary}")
+        lines.append("")
+        lines.append(f"📍 目的地文件: {self.destinations_count} 个")
+        for d in self.destinations_details:
+            coord = f" ({d['latitude']}, {d['longitude']})" if d.get("latitude") else " (无坐标)"
+            lines.append(f"   - 第{d['order']}位: {d['name']}{coord}")
+        lines.append("")
+        lines.append(f"🛰️ GPS 轨迹: {self.gps_points_count} 个点")
+        if self.gps_date_range:
+            lines.append(f"   时间跨度: {self.gps_date_range[0]} 至 {self.gps_date_range[1]}")
+        lines.append(f"   估算里程: {self.gps_estimated_km:.1f} km")
+        lines.append("")
+        lines.append(f"📷 照片素材: {self.photos_total} 张")
+        lines.append(f"   含时间戳: {self.photos_with_timestamp} / {self.photos_total}")
+        lines.append(f"   含GPS定位: {self.photos_with_gps} / {self.photos_total}")
+        if self.photos_missing_timestamp:
+            lines.append(f"   ⚠️  缺少时间戳 ({len(self.photos_missing_timestamp)}张):")
+            for p in self.photos_missing_timestamp[:10]:
+                lines.append(f"      - {p}")
+        lines.append("")
+        lines.append(f"📝 文字备注: {self.notes_total} 条")
+        lines.append(f"   含时间戳: {self.notes_with_timestamp} / {self.notes_total}")
+        if self.notes_unmatched_to_gps:
+            lines.append(f"   ⚠️  无法匹配到 GPS 轨迹 ({len(self.notes_unmatched_to_gps)}条):")
+            for n in self.notes_unmatched_to_gps[:10]:
+                lines.append(f"      - [{n.get('time','?')}] {n.get('content','')[:30]}...")
+        lines.append("")
+        if self.cost_matches_preview:
+            lines.append(f"💰 识别到的金额 (预览 {len(self.cost_matches_preview)} 条):")
+            for c in self.cost_matches_preview:
+                lines.append(f"   - [{c.get('category','?')}] {c.get('amount')}元: {c.get('evidence','')[:40]}")
+            lines.append("")
+        if self.warnings:
+            lines.append(f"⚠️  需要注意 ({len(self.warnings)} 条):")
+            for w in self.warnings:
+                lines.append(f"   - {w}")
+        lines.append("")
+        lines.append("=" * 60)
+        return "\n".join(lines)
+
+
+def build_precheck_report(destinations_file: str = "", gps_file: str = "",
+                          photos_dir: str = "", notes_file: str = "",
+                          output_dir: Optional[str] = None) -> PrecheckReport:
+    """构建素材预检报告，可选输出JSON+TXT"""
+    report = PrecheckReport()
+    destinations = DestinationParser.parse(destinations_file) if destinations_file else []
+    waypoints = parse_gps_track(gps_file) if gps_file else []
+    photos_raw = []
+    photos_with_ts = 0
+    photos_with_gps = 0
+    photos_missing_ts: List[str] = []
+    if photos_dir and os.path.isdir(photos_dir):
+        for root, _, files in os.walk(photos_dir):
+            for fn in sorted(files):
+                if fn.lower().endswith((".jpg", ".jpeg", ".png", ".heic", ".webp")):
+                    fp = os.path.join(root, fn)
+                    photos_raw.append(fp)
+        for fp in photos_raw:
+            try:
+                from PIL import Image, ExifTags
+                with Image.open(fp) as img:
+                    exif = img._getexif() if hasattr(img, "_getexif") else None
+                    has_ts = False
+                    has_gps = False
+                    if exif:
+                        exif_dict = {ExifTags.TAGS.get(k, k): v for k, v in exif.items()}
+                        dt_str = exif_dict.get("DateTimeOriginal") or exif_dict.get("DateTime")
+                        if dt_str:
+                            has_ts = True
+                            photos_with_ts += 1
+                        gps_info = exif_dict.get("GPSInfo")
+                        if gps_info and isinstance(gps_info, dict):
+                            gps = {ExifTags.GPSTAGS.get(k, k): v for k, v in gps_info.items()}
+                            if "GPSLatitude" in gps and "GPSLongitude" in gps:
+                                has_gps = True
+                                photos_with_gps += 1
+                    if not has_ts:
+                        photos_missing_ts.append(fp)
+            except Exception:
+                photos_missing_ts.append(fp)
+    report.photos_total = len(photos_raw)
+    report.photos_with_timestamp = photos_with_ts
+    report.photos_with_gps = photos_with_gps
+    report.photos_missing_timestamp = photos_missing_ts
+    notes = NoteParser.parse(notes_file) if notes_file else []
+    report.notes_total = len(notes)
+    report.notes_with_timestamp = sum(1 for n in notes if n.timestamp)
+    report.notes_without_timestamp = [
+        n.content[:50] for n in notes if not n.timestamp
+    ]
+    report.destinations_count = len(destinations)
+    report.destinations_details = [
+        {"order": d.order, "name": d.name, "latitude": d.latitude, "longitude": d.longitude,
+         "description_length": len(d.description)} for d in destinations
+    ]
+    report.gps_points_count = len(waypoints)
+    waypoints_sorted = sorted([w for w in waypoints if w.timestamp], key=lambda w: w.timestamp)
+    if waypoints_sorted:
+        report.gps_date_range = (
+            waypoints_sorted[0].timestamp.strftime("%Y-%m-%d %H:%M"),
+            waypoints_sorted[-1].timestamp.strftime("%Y-%m-%d %H:%M"),
+        )
+        total_km = 0.0
+        for j in range(1, len(waypoints_sorted)):
+            total_km += haversine_distance(
+                waypoints_sorted[j-1].latitude, waypoints_sorted[j-1].longitude,
+                waypoints_sorted[j].latitude, waypoints_sorted[j].longitude
+            )
+        report.gps_estimated_km = round(total_km, 1)
+    if waypoints_sorted and notes:
+        t_start = waypoints_sorted[0].timestamp
+        t_end = waypoints_sorted[-1].timestamp
+        unmatched = []
+        for n in notes:
+            if n.timestamp and not (t_start <= n.timestamp <= t_end):
+                unmatched.append({
+                    "time": n.timestamp.strftime("%Y-%m-%d %H:%M") if n.timestamp else "",
+                    "content": n.content[:100],
+                })
+        report.notes_unmatched_to_gps = unmatched
+    cost_preview = []
+    for n in notes:
+        costs = extract_costs(n.content, n.tags)
+        for rec in costs.get("matches", []):
+            cost_preview.append(rec)
+    report.cost_matches_preview = cost_preview[:20]
+    warnings = []
+    if report.destinations_count == 0:
+        warnings.append("未找到目的地，请检查 destinations 文件路径或格式（应为 ## 开头的 Markdown）")
+    if report.gps_points_count == 0:
+        warnings.append("GPS 轨迹为空，将无法生成路书的里程与驾驶段")
+    if report.photos_total == 0:
+        warnings.append("未找到照片，建议补充 JPG/PNG 素材以生成拍照点清单")
+    if report.photos_missing_timestamp:
+        warnings.append(f"{len(photos_missing_ts)} 张照片缺少 EXIF 时间戳，将无法精确匹配到路线")
+    if report.notes_total == 0:
+        warnings.append("未找到文字备注，费用识别与事件描述将为空")
+    if report.notes_unmatched_to_gps:
+        warnings.append(f"{len(report.notes_unmatched_to_gps)} 条备注不在 GPS 时间范围内，可能无法生成对应事件")
+    report.warnings = warnings
+    report.summary = (
+        f"{report.destinations_count}个目的地 / {report.gps_points_count}轨迹点 / "
+        f"{report.photos_total}张照片 / {report.notes_total}条备注 · "
+        f"预估里程{report.gps_estimated_km:.0f}km · 共识别{len(cost_preview)}处金额"
+    )
+    if output_dir:
+        ensure_dir(output_dir)
+        save_json(report.to_dict(), os.path.join(output_dir, "precheck_report.json"))
+        with open(os.path.join(output_dir, "precheck_report.txt"), "w", encoding="utf-8") as f:
+            f.write(report.to_text())
+    return report

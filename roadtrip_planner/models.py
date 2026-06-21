@@ -101,11 +101,15 @@ class RoadEvent:
     fuel_cost: float = 0.0             # 油费
     toll_cost: float = 0.0             # 过路费
     other_cost: float = 0.0            # 其他费用
+    cost_breakdown: Dict[str, Any] = field(default_factory=dict)  # 费用明细: accommodation/food/ticket/parking/other/per_person
     photos: List[Photo] = field(default_factory=list)
     tags: List[str] = field(default_factory=list)
     pitfalls: List[str] = field(default_factory=list)   # 踩坑提醒
+    pitfall_categories: List[str] = field(default_factory=list)  # 坑分类（费用坑/路况坑...）
     highlights: List[str] = field(default_factory=list)  # 亮点
-    rating: Optional[int] = None       # 评分 1-5
+    rating: Optional[int] = None       # 综合评分 1-5
+    road_condition_score: Optional[int] = None  # 路况评分 1-5 (测评版)
+    driving_difficulty: Optional[str] = None    # 驾驶难度: 简单/中等/困难/地狱
 
     @property
     def total_cost(self) -> float:
@@ -128,11 +132,15 @@ class RoadEvent:
             "toll_cost": self.toll_cost,
             "other_cost": self.other_cost,
             "total_cost": self.total_cost,
+            "cost_breakdown": self.cost_breakdown,
             "photos": [p.to_dict() for p in self.photos],
             "tags": self.tags,
             "pitfalls": self.pitfalls,
+            "pitfall_categories": self.pitfall_categories,
             "highlights": self.highlights,
             "rating": self.rating,
+            "road_condition_score": self.road_condition_score,
+            "driving_difficulty": self.driving_difficulty,
         }
         return d
 
@@ -150,7 +158,10 @@ class DayPlan:
     total_distance_km: float = 0.0
     total_duration_hours: float = 0.0
     total_cost: float = 0.0
+    cost_breakdown: Dict[str, float] = field(default_factory=dict)  # fuel/toll/accommodation/food/ticket/parking/other
     weather: str = ""
+    photo_count: int = 0
+    driving_difficulty_avg: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -164,7 +175,10 @@ class DayPlan:
             "total_distance_km": self.total_distance_km,
             "total_duration_hours": self.total_duration_hours,
             "total_cost": self.total_cost,
+            "cost_breakdown": self.cost_breakdown,
             "weather": self.weather,
+            "photo_count": self.photo_count,
+            "driving_difficulty_avg": self.driving_difficulty_avg,
         }
 
 
@@ -178,10 +192,14 @@ class Roadbook:
     total_days: int
     total_distance_km: float
     total_cost: float
-    destinations: List[Destination]
-    days: List[DayPlan]
+    cost_breakdown: Dict[str, float] = field(default_factory=dict)  # 全程费用明细
+    destinations: List[Destination] = field(default_factory=list)
+    days: List[DayPlan] = field(default_factory=list)
     template_style: Optional[TemplateStyle] = None
     vehicle_info: Dict[str, Any] = field(default_factory=dict)
+    photo_spots: List[Dict[str, Any]] = field(default_factory=list)  # 拍照点清单（攻略版用）
+    pitfalls_by_category: Dict[str, List[str]] = field(default_factory=dict)  # 分类踩坑清单
+    road_scores: Dict[str, Any] = field(default_factory=dict)  # 路况测评汇总
     meta: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -193,10 +211,14 @@ class Roadbook:
             "total_days": self.total_days,
             "total_distance_km": self.total_distance_km,
             "total_cost": self.total_cost,
+            "cost_breakdown": self.cost_breakdown,
             "destinations": [d.to_dict() for d in self.destinations],
             "days": [d.to_dict() for d in self.days],
             "template_style": self.template_style.value if self.template_style else None,
             "vehicle_info": self.vehicle_info,
+            "photo_spots": self.photo_spots,
+            "pitfalls_by_category": self.pitfalls_by_category,
+            "road_scores": self.road_scores,
             "meta": self.meta,
         }
 
@@ -244,11 +266,15 @@ class Roadbook:
                     fuel_cost=evt_data.get("fuel_cost", 0.0),
                     toll_cost=evt_data.get("toll_cost", 0.0),
                     other_cost=evt_data.get("other_cost", 0.0),
+                    cost_breakdown=evt_data.get("cost_breakdown", {}),
                     photos=photos,
                     tags=evt_data.get("tags", []),
                     pitfalls=evt_data.get("pitfalls", []),
+                    pitfall_categories=evt_data.get("pitfall_categories", []),
                     highlights=evt_data.get("highlights", []),
                     rating=evt_data.get("rating"),
+                    road_condition_score=evt_data.get("road_condition_score"),
+                    driving_difficulty=evt_data.get("driving_difficulty"),
                 )
                 events.append(evt)
             day = DayPlan(
@@ -262,7 +288,10 @@ class Roadbook:
                 total_distance_km=day_data.get("total_distance_km", 0.0),
                 total_duration_hours=day_data.get("total_duration_hours", 0.0),
                 total_cost=day_data.get("total_cost", 0.0),
+                cost_breakdown=day_data.get("cost_breakdown", {}),
                 weather=day_data.get("weather", ""),
+                photo_count=day_data.get("photo_count", 0),
+                driving_difficulty_avg=day_data.get("driving_difficulty_avg"),
             )
             days.append(day)
         return cls(
@@ -273,10 +302,14 @@ class Roadbook:
             total_days=data.get("total_days", 0),
             total_distance_km=data.get("total_distance_km", 0.0),
             total_cost=data.get("total_cost", 0.0),
+            cost_breakdown=data.get("cost_breakdown", {}),
             destinations=destinations,
             days=days,
             template_style=TemplateStyle(data["template_style"]) if data.get("template_style") else None,
             vehicle_info=data.get("vehicle_info", {}),
+            photo_spots=data.get("photo_spots", []),
+            pitfalls_by_category=data.get("pitfalls_by_category", {}),
+            road_scores=data.get("road_scores", {}),
             meta=data.get("meta", {}),
         )
 

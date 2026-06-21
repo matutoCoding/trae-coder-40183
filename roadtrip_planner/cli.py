@@ -8,7 +8,7 @@ from pathlib import Path
 import click
 
 from .models import Roadbook, TemplateStyle
-from .importer import import_materials
+from .importer import import_materials, build_precheck_report
 from .templater import apply_template
 from .exporter import export_roadbook
 from .utils import ensure_dir
@@ -153,6 +153,52 @@ def export_cmd(input_path, formats_str, output_dir):
     except Exception as e:
         logging.exception("导出失败")
         raise click.ClickException(f"导出失败：{e}")
+
+
+# ---------------------------------------------------------------------------
+# precheck 命令
+# ---------------------------------------------------------------------------
+
+@cli.command("precheck", help="素材预检：统计目的地/GPS/照片/备注数量，标记异常项，输出预检报告")
+@click.option("--destinations", "-d", "destinations_file",
+              type=click.Path(exists=False),
+              help="目的地文件 (Markdown)")
+@click.option("--gps", "-g", "gps_file",
+              type=click.Path(exists=False),
+              help="GPS轨迹文件 (.gpx/.csv)")
+@click.option("--photos", "-p", "photos_dir",
+              type=click.Path(exists=False),
+              help="照片目录")
+@click.option("--notes", "-n", "notes_file",
+              type=click.Path(exists=False),
+              help="文字备注文件 (.md/.csv)")
+@click.option("--output", "-o", "output_dir",
+              type=click.Path(),
+              help="预检报告输出目录（不填则仅打印不保存）")
+@click.option("--quiet", "-q", is_flag=True, help="静默模式，不打印详细报告")
+def precheck_cmd(destinations_file, gps_file, photos_dir, notes_file, output_dir, quiet):
+    """素材预检：在 import 前快速统计各类素材数量、缺失项，生成预检报告
+    """
+    click.echo("🔎 开始预检素材…")
+    report = build_precheck_report(
+        destinations_file or "",
+        gps_file or "",
+        photos_dir or "",
+        notes_file or "",
+        output_dir or None,
+    )
+    if not quiet:
+        click.echo()
+        click.echo(report.to_text())
+        click.echo()
+    if output_dir:
+        ensure_dir(output_dir)
+        click.echo(f"💾 预检报告已保存：")
+        click.echo(f"   → {os.path.join(output_dir, 'precheck_report.json')}")
+        click.echo(f"   → {os.path.join(output_dir, 'precheck_report.txt')}")
+    else:
+        if report.warnings:
+            click.echo(f"⚠️  共 {len(report.warnings)} 条警告，使用 --output 可保存完整报告。")
 
 
 def main():

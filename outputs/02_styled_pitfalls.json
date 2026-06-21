@@ -1,11 +1,20 @@
 {
   "title": "川西小环线自驾游 → 成都 → 四姑娘山 → 丹巴甲居藏寨 → 新都桥 → 康定 → 成都（终点）｜避坑指南版",
-  "created_at": "2026-06-22T05:55:50.121985",
+  "created_at": "2026-06-22T06:44:37.363713",
   "start_date": "2025-10-01",
   "end_date": "2025-10-03",
   "total_days": 3,
   "total_distance_km": 541.9,
-  "total_cost": 0.0,
+  "total_cost": 643.0,
+  "cost_breakdown": {
+    "fuel": 420.0,
+    "toll": 223.0,
+    "accommodation": 800.0,
+    "food": 588.0,
+    "ticket": 200.0,
+    "parking": 440.0,
+    "other": 0.0
+  },
   "destinations": [
     {
       "name": "川西小环线自驾游",
@@ -62,41 +71,55 @@
       "day_index": 1,
       "date": "2025-10-01",
       "title": "第 1 天 · 2025-10-01",
-      "summary": "第 1 天｜2025-10-01｜全程 214.2km｜发现 4 处提醒｜拥堵 1 段｜当日总费用 ¥0",
+      "summary": "第 1 天｜2025-10-01｜全程 214.2km｜发现 4 处提醒｜拥堵 1 段｜当日总费用 ¥485｜餐饮约¥438 住宿约¥380",
       "events": [
         {
-          "event_id": "driving_2c80d26a",
+          "event_id": "driving_e91796f2",
           "timestamp": "2025-10-01T07:30:00",
           "event_type": "departure",
           "title": "早晨出发",
-          "description": "早晨从成都出发，天气不错，加满了油，油费420元 #加油\n\n走成灌高速转都汶高速，路况很好，油耗大概8.2L/百公里\n\n开始盘山了，弯多弯急，新手司机小心 #路况",
+          "description": "早晨从成都出发，天气不错，加满了油，油费420元 #加油\n\n走成灌高速转都汶高速，路况很好，油耗大概8.2L/百公里，成灌高速过路费65元 #过路\n\n开始盘山了，弯多弯急，新手司机小心 #路况\n\n🏷 坑分类：路况坑",
           "latitude": 30.5728,
           "longitude": 104.0668,
           "duration_minutes": 155,
           "distance_km": 124.89,
-          "cumulative_km": 124.89,
+          "cumulative_km": 0.0,
           "avg_speed": 48.3,
-          "fuel_cost": 0.0,
-          "toll_cost": 0.0,
+          "fuel_cost": 420.0,
+          "toll_cost": 65.0,
           "other_cost": 0.0,
-          "total_cost": 0.0,
+          "total_cost": 485.0,
+          "cost_breakdown": {
+            "accommodation": 0.0,
+            "food": 0.0,
+            "ticket": 0.0,
+            "parking": 0.0,
+            "other": 0.0,
+            "per_person": null
+          },
           "photos": [],
           "tags": [
             "加油",
+            "过路",
             "路况"
           ],
           "pitfalls": [
             "开始盘山了，弯多弯急，新手司机小心 #路况"
           ],
+          "pitfall_categories": [
+            "路况坑"
+          ],
           "highlights": [],
-          "rating": null
+          "rating": null,
+          "road_condition_score": 4,
+          "driving_difficulty": "简单"
         },
         {
-          "event_id": "photo_8e67dfcb",
+          "event_id": "photo_e9164bc1",
           "timestamp": "2025-10-01T10:15:00",
           "event_type": "photo",
           "title": "四姑娘山",
-          "description": "到四姑娘山镇了，找了个观景台停，太震撼！ #拍照 云海雪山尽收眼底\n\n四姑娘山双桥沟入口，门票+观光车150/人，推荐大家坐最里面那班车往回走 #攻略\n\n沟里有很多拍照点，红杉林、布达拉峰都很棒，注意防晒紫外线强！ #避坑\n\n午餐在镇上吃的藏家土火锅，168/人，味道不错分量足 #午餐 #推荐",
+          "description": "到四姑娘山镇了，找了个观景台停，太震撼！ #拍照 云海雪山尽收眼底\n\n四姑娘山双桥沟入口，门票+观光车150元/人，推荐大家坐最里面那班车往回走 #攻略\n\n沟里有很多拍照点，红杉林、布达拉峰都很棒，注意防晒紫外线强！ #避坑\n\n午餐在镇上吃的藏家土火锅，168元/人，味道不错分量足 #午餐 #推荐\n\n🏷 坑分类：拍照坑",
           "latitude": 31.1,
           "longitude": 102.9,
           "duration_minutes": 165,
@@ -107,6 +130,14 @@
           "toll_cost": 0.0,
           "other_cost": 0.0,
           "total_cost": 0.0,
+          "cost_breakdown": {
+            "accommodation": 0.0,
+            "food": 318.0,
+            "ticket": 150.0,
+            "parking": 0.0,
+            "other": 0.0,
+            "per_person": null
+          },
           "photos": [],
           "tags": [
             "拍照",
@@ -118,29 +149,42 @@
           "pitfalls": [
             "沟里有很多拍照点，红杉林、布达拉峰都很棒，注意防晒紫外线强！ #避坑"
           ],
+          "pitfall_categories": [
+            "拍照坑"
+          ],
           "highlights": [
             "到四姑娘山镇了，找了个观景台停，太震撼！ #拍照 云海雪山尽收眼底",
-            "四姑娘山双桥沟入口，门票+观光车150/人，推荐大家坐最里面那班车往回走 #攻略",
-            "午餐在镇上吃的藏家土火锅，168/人，味道不错分量足 #午餐 #推荐"
+            "四姑娘山双桥沟入口，门票+观光车150元/人，推荐大家坐最里面那班车往回走 #攻略",
+            "午餐在镇上吃的藏家土火锅，168元/人，味道不错分量足 #午餐 #推荐"
           ],
-          "rating": null
+          "rating": null,
+          "road_condition_score": null,
+          "driving_difficulty": null
         },
         {
-          "event_id": "traffic_jam_ec6cdf9f",
+          "event_id": "traffic_jam_ac545dd1",
           "timestamp": "2025-10-01T13:10:00",
           "event_type": "traffic_jam",
           "title": "堵车",
-          "description": "继续往丹巴方向，路窄弯多，有一段落石区注意快速通过 #危险 #避坑\n\n途中遇到一小段堵车约20分钟，修路单边放行 #堵车\n\n【避坑提醒】\n⚠ 踩坑记录：继续往丹巴方向，路窄弯多，有一段落石区注意快速通过 #危险 #避坑\n📌 避坑建议：提前查看实时路况，考虑错峰出行\n⏳ 本次延误：1 小时 50 分钟",
+          "description": "继续往丹巴方向，路窄弯多，有一段落石区注意快速通过 #危险 #避坑\n\n途中遇到一小段堵车约20分钟，修路单边放行 #堵车\n\n🏷 坑分类：路况坑\n\n【避坑提醒】\n⚠ 踩坑记录：继续往丹巴方向，路窄弯多，有一段落石区注意快速通过 #危险 #避坑\n📌 避坑建议：提前查看实时路况，考虑错峰出行\n⏳ 本次延误：1 小时 50 分钟",
           "latitude": 31.08,
           "longitude": 102.93,
           "duration_minutes": 110,
           "distance_km": 72.91,
-          "cumulative_km": 197.8,
+          "cumulative_km": 130.97,
           "avg_speed": 39.8,
           "fuel_cost": 0.0,
           "toll_cost": 0.0,
           "other_cost": 0.0,
           "total_cost": 0.0,
+          "cost_breakdown": {
+            "accommodation": 0.0,
+            "food": 0.0,
+            "ticket": 0.0,
+            "parking": 0.0,
+            "other": 0.0,
+            "per_person": null
+          },
           "photos": [],
           "tags": [
             "重点",
@@ -151,11 +195,16 @@
           "pitfalls": [
             "继续往丹巴方向，路窄弯多，有一段落石区注意快速通过 #危险 #避坑"
           ],
+          "pitfall_categories": [
+            "路况坑"
+          ],
           "highlights": [],
-          "rating": 4
+          "rating": 4,
+          "road_condition_score": 1,
+          "driving_difficulty": "困难"
         },
         {
-          "event_id": "scenic_stop_31ecced8",
+          "event_id": "scenic_stop_eeb8d02b",
           "timestamp": "2025-10-01T15:15:00",
           "event_type": "scenic_stop",
           "title": "下午观景停留",
@@ -170,16 +219,27 @@
           "toll_cost": 0.0,
           "other_cost": 0.0,
           "total_cost": 0.0,
+          "cost_breakdown": {
+            "accommodation": 0.0,
+            "food": 0.0,
+            "ticket": 0.0,
+            "parking": 0.0,
+            "other": 0.0,
+            "per_person": null
+          },
           "photos": [],
           "tags": [
             "拍照"
           ],
           "pitfalls": [],
+          "pitfall_categories": [],
           "highlights": [],
-          "rating": null
+          "rating": null,
+          "road_condition_score": null,
+          "driving_difficulty": null
         },
         {
-          "event_id": "driving_a9f786db",
+          "event_id": "driving_45c2b48c",
           "timestamp": "2025-10-01T16:10:00",
           "event_type": "driving",
           "title": "下午行驶",
@@ -188,24 +248,35 @@
           "longitude": 102.15,
           "duration_minutes": 30,
           "distance_km": 16.38,
-          "cumulative_km": 214.17,
+          "cumulative_km": 201.89,
           "avg_speed": 32.8,
           "fuel_cost": 0.0,
           "toll_cost": 0.0,
           "other_cost": 0.0,
           "total_cost": 0.0,
+          "cost_breakdown": {
+            "accommodation": 0.0,
+            "food": 0.0,
+            "ticket": 0.0,
+            "parking": 0.0,
+            "other": 0.0,
+            "per_person": null
+          },
           "photos": [],
           "tags": [],
           "pitfalls": [],
+          "pitfall_categories": [],
           "highlights": [],
-          "rating": null
+          "rating": null,
+          "road_condition_score": 3,
+          "driving_difficulty": "中等"
         },
         {
-          "event_id": "hotel_checkin_62445fb2",
+          "event_id": "hotel_checkin_345cb099",
           "timestamp": "2025-10-01T17:00:00",
           "event_type": "hotel_checkin",
           "title": "丹巴甲居藏寨",
-          "description": "到达丹巴甲居藏寨，门票50元，民宿老板来接，住的3号楼观景房380/晚 #住宿\n\n晚餐吃的藏式石板烧，味道一般有点贵，人均120，不推荐 #避坑 #晚餐\n\n⚠ 住宿避坑：提前确认停车位、隔音、热水、空调，旺季务必锁单\n\n踩坑反馈：晚餐吃的藏式石板烧，味道一般有点贵，人均120，不推荐 #避坑 #晚餐",
+          "description": "到达丹巴甲居藏寨，门票50元，民宿老板来接，住的3号楼观景房380元/晚 #住宿\n\n晚餐吃的藏式石板烧，味道一般有点贵，人均120元，不推荐 #避坑 #晚餐\n\n🏷 坑分类：餐饮坑\n\n🏨 房价参考：¥380/晚\n\n⚠ 住宿避坑：提前确认停车位、隔音、热水、空调，旺季务必锁单\n\n踩坑反馈：晚餐吃的藏式石板烧，味道一般有点贵，人均120元，不推荐 #避坑 #晚餐",
           "latitude": 30.85,
           "longitude": 101.93,
           "duration_minutes": 150,
@@ -216,6 +287,14 @@
           "toll_cost": 0.0,
           "other_cost": 0.0,
           "total_cost": 0.0,
+          "cost_breakdown": {
+            "accommodation": 380.0,
+            "food": 120.0,
+            "ticket": 50.0,
+            "parking": 0.0,
+            "other": 0.0,
+            "per_person": 120.0
+          },
           "photos": [],
           "tags": [
             "重点",
@@ -224,15 +303,20 @@
             "晚餐"
           ],
           "pitfalls": [
-            "晚餐吃的藏式石板烧，味道一般有点贵，人均120，不推荐 #避坑 #晚餐"
+            "晚餐吃的藏式石板烧，味道一般有点贵，人均120元，不推荐 #避坑 #晚餐"
+          ],
+          "pitfall_categories": [
+            "餐饮坑"
           ],
           "highlights": [
-            "晚餐吃的藏式石板烧，味道一般有点贵，人均120，不推荐 #避坑 #晚餐"
+            "晚餐吃的藏式石板烧，味道一般有点贵，人均120元，不推荐 #避坑 #晚餐"
           ],
-          "rating": 4
+          "rating": 4,
+          "road_condition_score": null,
+          "driving_difficulty": null
         },
         {
-          "event_id": "photo_58686ed2",
+          "event_id": "photo_dd93ce88",
           "timestamp": "2025-10-01T20:30:00",
           "event_type": "photo",
           "title": "拍照打卡",
@@ -241,39 +325,61 @@
           "longitude": null,
           "duration_minutes": 0,
           "distance_km": 0.0,
-          "cumulative_km": 541.8407030735951,
+          "cumulative_km": 214.17,
           "avg_speed": null,
           "fuel_cost": 0.0,
           "toll_cost": 0.0,
           "other_cost": 0.0,
           "total_cost": 0.0,
+          "cost_breakdown": {
+            "accommodation": 0.0,
+            "food": 0.0,
+            "ticket": 0.0,
+            "parking": 0.0,
+            "other": 0.0,
+            "per_person": null
+          },
           "photos": [],
           "tags": [
             "推荐",
             "拍照"
           ],
           "pitfalls": [],
+          "pitfall_categories": [],
           "highlights": [
             "夜里看星空，无光污染，银河肉眼可见 #推荐 #拍照"
           ],
-          "rating": null
+          "rating": null,
+          "road_condition_score": null,
+          "driving_difficulty": null
         }
       ],
       "start_location": "早晨出发",
       "end_location": "拍照打卡",
       "total_distance_km": 214.2,
       "total_duration_hours": 10.9,
-      "total_cost": 0.0,
-      "weather": ""
+      "total_cost": 485.0,
+      "cost_breakdown": {
+        "fuel": 420.0,
+        "toll": 65.0,
+        "accommodation": 380.0,
+        "food": 438.0,
+        "ticket": 200.0,
+        "parking": 0.0,
+        "other": 0.0
+      },
+      "weather": "",
+      "photo_count": 0,
+      "driving_difficulty_avg": "困难"
     },
     {
       "day_index": 2,
       "date": "2025-10-02",
       "title": "第 2 天 · 2025-10-02",
-      "summary": "第 2 天｜2025-10-02｜全程 149.7km｜发现 2 处提醒｜拥堵 0 段｜当日总费用 ¥0",
+      "summary": "第 2 天｜2025-10-02｜全程 149.7km｜发现 2 处提醒｜拥堵 0 段｜当日总费用 ¥0｜餐饮约¥150 住宿约¥420",
       "events": [
         {
-          "event_id": "photo_ee31b49b",
+          "event_id": "photo_c9bb891b",
           "timestamp": "2025-10-02T08:00:00",
           "event_type": "photo",
           "title": "丹巴甲居藏寨",
@@ -288,19 +394,30 @@
           "toll_cost": 0.0,
           "other_cost": 0.0,
           "total_cost": 0.0,
+          "cost_breakdown": {
+            "accommodation": 0.0,
+            "food": 0.0,
+            "ticket": 0.0,
+            "parking": 0.0,
+            "other": 0.0,
+            "per_person": null
+          },
           "photos": [],
           "tags": [
             "拍照",
             "推荐"
           ],
           "pitfalls": [],
+          "pitfall_categories": [],
           "highlights": [
             "早起拍藏寨日出，晨雾炊烟太美了 #拍照 #推荐"
           ],
-          "rating": null
+          "rating": null,
+          "road_condition_score": null,
+          "driving_difficulty": null
         },
         {
-          "event_id": "other_64dddfc7",
+          "event_id": "other_f74df0ce",
           "timestamp": "2025-10-02T08:30:00",
           "event_type": "departure",
           "title": "早晨出发",
@@ -309,36 +426,55 @@
           "longitude": null,
           "duration_minutes": 0,
           "distance_km": 0.0,
-          "cumulative_km": 541.8407030735951,
+          "cumulative_km": 223.15,
           "avg_speed": null,
           "fuel_cost": 0.0,
           "toll_cost": 0.0,
           "other_cost": 0.0,
           "total_cost": 0.0,
+          "cost_breakdown": {
+            "accommodation": 0.0,
+            "food": 0.0,
+            "ticket": 0.0,
+            "parking": 0.0,
+            "other": 0.0,
+            "per_person": null
+          },
           "photos": [],
           "tags": [
             "攻略"
           ],
           "pitfalls": [],
+          "pitfall_categories": [],
           "highlights": [],
-          "rating": null
+          "rating": null,
+          "road_condition_score": null,
+          "driving_difficulty": null
         },
         {
-          "event_id": "driving_dcdcb6f6",
+          "event_id": "driving_84c47f37",
           "timestamp": "2025-10-02T08:45:00",
           "event_type": "driving",
           "title": "上午行驶",
-          "description": "折多山垭口4298米，风大温度低，注意保暖 #路况",
+          "description": "折多山垭口4298米，风大温度低，注意保暖 #路况\n\n🏷 坑分类：路况坑",
           "latitude": 30.78,
           "longitude": 101.88,
           "duration_minutes": 117,
           "distance_km": 87.98,
-          "cumulative_km": 302.15,
+          "cumulative_km": 232.13,
           "avg_speed": 45.1,
           "fuel_cost": 0.0,
           "toll_cost": 0.0,
           "other_cost": 0.0,
           "total_cost": 0.0,
+          "cost_breakdown": {
+            "accommodation": 0.0,
+            "food": 0.0,
+            "ticket": 0.0,
+            "parking": 0.0,
+            "other": 0.0,
+            "per_person": null
+          },
           "photos": [],
           "tags": [
             "路况"
@@ -346,15 +482,20 @@
           "pitfalls": [
             "折多山垭口4298米，风大温度低，注意保暖 #路况"
           ],
+          "pitfall_categories": [
+            "路况坑"
+          ],
           "highlights": [],
-          "rating": null
+          "rating": null,
+          "road_condition_score": 4,
+          "driving_difficulty": "简单"
         },
         {
-          "event_id": "scenic_stop_7a770edb",
+          "event_id": "scenic_stop_47137231",
           "timestamp": "2025-10-02T10:50:00",
           "event_type": "scenic_stop",
           "title": "新都桥",
-          "description": "折多山垭口停车要停正规停车场，别停路边会被贴罚单 #避坑 停车费20\n\n⚠ 景点踩坑：折多山垭口停车要停正规停车场，别停路边会被贴罚单 #避坑 停车费20",
+          "description": "折多山垭口停车要停正规停车场，别停路边会被贴罚单 #避坑 停车费20元\n\n🏷 坑分类：路况坑\n\n⚠ 景点踩坑：折多山垭口停车要停正规停车场，别停路边会被贴罚单 #避坑 停车费20元",
           "latitude": 30.06,
           "longitude": 101.493,
           "duration_minutes": 30,
@@ -365,22 +506,35 @@
           "toll_cost": 0.0,
           "other_cost": 0.0,
           "total_cost": 0.0,
+          "cost_breakdown": {
+            "accommodation": 0.0,
+            "food": 0.0,
+            "ticket": 0.0,
+            "parking": 20.0,
+            "other": 0.0,
+            "per_person": null
+          },
           "photos": [],
           "tags": [
             "避坑"
           ],
           "pitfalls": [
-            "折多山垭口停车要停正规停车场，别停路边会被贴罚单 #避坑 停车费20"
+            "折多山垭口停车要停正规停车场，别停路边会被贴罚单 #避坑 停车费20元"
+          ],
+          "pitfall_categories": [
+            "路况坑"
           ],
           "highlights": [],
-          "rating": null
+          "rating": null,
+          "road_condition_score": null,
+          "driving_difficulty": null
         },
         {
-          "event_id": "driving_9a953bd7",
+          "event_id": "driving_3a4bdc4b",
           "timestamp": "2025-10-02T11:30:00",
           "event_type": "driving",
           "title": "中午行驶",
-          "description": "",
+          "description": "⚠ 路况警告：本段评分仅 1/5，难度 地狱，谨慎驾驶",
           "latitude": 30.055,
           "longitude": 101.49,
           "duration_minutes": 0,
@@ -391,18 +545,29 @@
           "toll_cost": 0.0,
           "other_cost": 0.0,
           "total_cost": 0.0,
+          "cost_breakdown": {
+            "accommodation": 0.0,
+            "food": 0.0,
+            "ticket": 0.0,
+            "parking": 0.0,
+            "other": 0.0,
+            "per_person": null
+          },
           "photos": [],
           "tags": [],
           "pitfalls": [],
+          "pitfall_categories": [],
           "highlights": [],
-          "rating": null
+          "rating": null,
+          "road_condition_score": 1,
+          "driving_difficulty": "地狱"
         },
         {
-          "event_id": "lunch_23da6811",
+          "event_id": "lunch_e36a1773",
           "timestamp": "2025-10-02T11:45:00",
           "event_type": "lunch",
           "title": "新都桥",
-          "description": "到新都桥了，找了家川菜馆午餐，味道正宗人均60 #午餐\n\n⚠ 避坑：尽量选择评分4分以上商家，避开景区门口拉客店",
+          "description": "到新都桥了，找了家川菜馆午餐，味道正宗人均60元 #午餐\n\n💰 消费参考：参考人均 ¥60｜流水账人均 ¥60\n\n⚠ 避坑：尽量选择评分4分以上商家，避开景区门口拉客店",
           "latitude": 30.05,
           "longitude": 101.49,
           "duration_minutes": 90,
@@ -413,17 +578,28 @@
           "toll_cost": 0.0,
           "other_cost": 0.0,
           "total_cost": 0.0,
+          "cost_breakdown": {
+            "accommodation": 0.0,
+            "food": 60.0,
+            "ticket": 0.0,
+            "parking": 0.0,
+            "other": 0.0,
+            "per_person": 60.0
+          },
           "photos": [],
           "tags": [
             "重点",
             "午餐"
           ],
           "pitfalls": [],
+          "pitfall_categories": [],
           "highlights": [],
-          "rating": 4
+          "rating": 4,
+          "road_condition_score": null,
+          "driving_difficulty": null
         },
         {
-          "event_id": "driving_41113a10",
+          "event_id": "driving_1caa1347",
           "timestamp": "2025-10-02T13:30:00",
           "event_type": "driving",
           "title": "下午行驶",
@@ -432,29 +608,40 @@
           "longitude": 101.48,
           "duration_minutes": 60,
           "distance_km": 61.7,
-          "cumulative_km": 363.85,
+          "cumulative_km": 314.49,
           "avg_speed": 61.7,
           "fuel_cost": 0.0,
           "toll_cost": 0.0,
           "other_cost": 0.0,
           "total_cost": 0.0,
+          "cost_breakdown": {
+            "accommodation": 0.0,
+            "food": 0.0,
+            "ticket": 0.0,
+            "parking": 0.0,
+            "other": 0.0,
+            "per_person": null
+          },
           "photos": [],
           "tags": [
             "推荐",
             "拍照"
           ],
           "pitfalls": [],
+          "pitfall_categories": [],
           "highlights": [
             "新都桥十里画廊真的名不虚传，处处都是Windows桌面 #推荐 #拍照"
           ],
-          "rating": null
+          "rating": null,
+          "road_condition_score": 5,
+          "driving_difficulty": "简单"
         },
         {
-          "event_id": "dinner_48b6cb65",
+          "event_id": "dinner_007e6bed",
           "timestamp": "2025-10-02T15:00:00",
           "event_type": "dinner",
           "title": "康定",
-          "description": "到达康定，住溜溜城附近的酒店，420/晚，停车方便 #住宿\n\n晚餐吃的康定本地牦牛肉汤锅，强烈推荐！人均90 #推荐 #晚餐\n\n⚠ 避坑：尽量选择评分4分以上商家，避开景区门口拉客店",
+          "description": "到达康定，住溜溜城附近的酒店，420元/晚，停车方便 #住宿\n\n晚餐吃的康定本地牦牛肉汤锅，强烈推荐！人均90元 #推荐 #晚餐\n\n💰 消费参考：参考人均 ¥90｜流水账人均 ¥90\n\n⚠ 避坑：尽量选择评分4分以上商家，避开景区门口拉客店",
           "latitude": 30.058,
           "longitude": 101.961,
           "duration_minutes": 240,
@@ -465,6 +652,14 @@
           "toll_cost": 0.0,
           "other_cost": 0.0,
           "total_cost": 0.0,
+          "cost_breakdown": {
+            "accommodation": 420.0,
+            "food": 90.0,
+            "ticket": 0.0,
+            "parking": 420.0,
+            "other": 0.0,
+            "per_person": 90.0
+          },
           "photos": [],
           "tags": [
             "重点",
@@ -473,13 +668,16 @@
             "晚餐"
           ],
           "pitfalls": [],
+          "pitfall_categories": [],
           "highlights": [
-            "晚餐吃的康定本地牦牛肉汤锅，强烈推荐！人均90 #推荐 #晚餐"
+            "晚餐吃的康定本地牦牛肉汤锅，强烈推荐！人均90元 #推荐 #晚餐"
           ],
-          "rating": 4
+          "rating": 4,
+          "road_condition_score": null,
+          "driving_difficulty": null
         },
         {
-          "event_id": "dinner_3f2576f5",
+          "event_id": "dinner_25efe207",
           "timestamp": "2025-10-02T21:00:00",
           "event_type": "dinner",
           "title": "晚餐",
@@ -488,22 +686,33 @@
           "longitude": null,
           "duration_minutes": 0,
           "distance_km": 0.0,
-          "cumulative_km": 541.8407030735951,
+          "cumulative_km": 363.85,
           "avg_speed": null,
           "fuel_cost": 0.0,
           "toll_cost": 0.0,
           "other_cost": 0.0,
           "total_cost": 0.0,
+          "cost_breakdown": {
+            "accommodation": 0.0,
+            "food": 0.0,
+            "ticket": 0.0,
+            "parking": 0.0,
+            "other": 0.0,
+            "per_person": null
+          },
           "photos": [],
           "tags": [
             "重点",
             "推荐"
           ],
           "pitfalls": [],
+          "pitfall_categories": [],
           "highlights": [
             "康定夜景不错，溜溜城有演出可以看看 #推荐"
           ],
-          "rating": 4
+          "rating": 4,
+          "road_condition_score": null,
+          "driving_difficulty": null
         }
       ],
       "start_location": "丹巴甲居藏寨",
@@ -511,20 +720,31 @@
       "total_distance_km": 149.7,
       "total_duration_hours": 9.2,
       "total_cost": 0.0,
-      "weather": ""
+      "cost_breakdown": {
+        "fuel": 0.0,
+        "toll": 0.0,
+        "accommodation": 420.0,
+        "food": 150.0,
+        "ticket": 0.0,
+        "parking": 440.0,
+        "other": 0.0
+      },
+      "weather": "",
+      "photo_count": 0,
+      "driving_difficulty_avg": "地狱"
     },
     {
       "day_index": 3,
       "date": "2025-10-03",
       "title": "第 3 天 · 2025-10-03",
-      "summary": "第 3 天｜2025-10-03｜全程 178.0km｜发现 0 处提醒｜拥堵 0 段｜当日总费用 ¥0",
+      "summary": "第 3 天｜2025-10-03｜全程 178.0km｜发现 0 处提醒｜拥堵 0 段｜当日总费用 ¥158",
       "events": [
         {
-          "event_id": "rest_72814d33",
+          "event_id": "rest_1c7a6446",
           "timestamp": "2025-10-03T07:45:00",
           "event_type": "rest",
           "title": "康定",
-          "description": "出发回成都，走雅康高速，新高速路况超好 #路况\n\n💡 小提示：大服务区停留不超过20分钟，避开人流高峰",
+          "description": "出发回成都，走雅康高速，新高速路况超好，雅康高速过路费158元 #过路\n\n💡 小提示：大服务区停留不超过20分钟，避开人流高峰",
           "latitude": 30.058,
           "longitude": 101.961,
           "duration_minutes": 15,
@@ -532,20 +752,31 @@
           "cumulative_km": 363.85,
           "avg_speed": null,
           "fuel_cost": 0.0,
-          "toll_cost": 0.0,
+          "toll_cost": 158.0,
           "other_cost": 0.0,
-          "total_cost": 0.0,
+          "total_cost": 158.0,
+          "cost_breakdown": {
+            "accommodation": 0.0,
+            "food": 0.0,
+            "ticket": 0.0,
+            "parking": 0.0,
+            "other": 0.0,
+            "per_person": null
+          },
           "photos": [],
           "tags": [
             "重点",
-            "路况"
+            "过路"
           ],
           "pitfalls": [],
+          "pitfall_categories": [],
           "highlights": [],
-          "rating": 4
+          "rating": 4,
+          "road_condition_score": null,
+          "driving_difficulty": null
         },
         {
-          "event_id": "driving_cfb3fb3a",
+          "event_id": "driving_3e5d6efc",
           "timestamp": "2025-10-03T08:30:00",
           "event_type": "departure",
           "title": "早晨出发",
@@ -554,24 +785,35 @@
           "longitude": 102.1,
           "duration_minutes": 150,
           "distance_km": 155.86,
-          "cumulative_km": 519.71,
+          "cumulative_km": 389.83,
           "avg_speed": 62.3,
           "fuel_cost": 0.0,
           "toll_cost": 0.0,
           "other_cost": 0.0,
           "total_cost": 0.0,
+          "cost_breakdown": {
+            "accommodation": 0.0,
+            "food": 0.0,
+            "ticket": 0.0,
+            "parking": 0.0,
+            "other": 0.0,
+            "per_person": null
+          },
           "photos": [],
           "tags": [
             "推荐"
           ],
           "pitfalls": [],
+          "pitfall_categories": [],
           "highlights": [
             "二郎山隧道这段真的壮观，全长13公里 #推荐"
           ],
-          "rating": null
+          "rating": null,
+          "road_condition_score": 5,
+          "driving_difficulty": "简单"
         },
         {
-          "event_id": "lunch_206a98a7",
+          "event_id": "lunch_b4115729",
           "timestamp": "2025-10-03T11:30:00",
           "event_type": "lunch",
           "title": "午餐",
@@ -586,39 +828,61 @@
           "toll_cost": 0.0,
           "other_cost": 0.0,
           "total_cost": 0.0,
+          "cost_breakdown": {
+            "accommodation": 0.0,
+            "food": 0.0,
+            "ticket": 0.0,
+            "parking": 0.0,
+            "other": 0.0,
+            "per_person": null
+          },
           "photos": [],
           "tags": [
             "重点",
             "午餐"
           ],
           "pitfalls": [],
+          "pitfall_categories": [],
           "highlights": [],
-          "rating": 4
+          "rating": 4,
+          "road_condition_score": null,
+          "driving_difficulty": null
         },
         {
-          "event_id": "driving_aec3f012",
+          "event_id": "driving_85e15c76",
           "timestamp": "2025-10-03T13:10:00",
           "event_type": "driving",
           "title": "下午行驶",
-          "description": "⚠ 路况警告：该路段速度偏低，建议出发前确认是否有修路/塌方/管制",
+          "description": "⚠ 路况警告：本段评分仅 2/5，难度 困难，谨慎驾驶\n\n⚠ 路况警告：该路段速度偏低，建议出发前确认是否有修路/塌方/管制",
           "latitude": 30.51,
           "longitude": 103.83,
           "duration_minutes": 60,
           "distance_km": 22.13,
-          "cumulative_km": 541.84,
+          "cumulative_km": 522.87,
           "avg_speed": 22.1,
           "fuel_cost": 0.0,
           "toll_cost": 0.0,
           "other_cost": 0.0,
           "total_cost": 0.0,
+          "cost_breakdown": {
+            "accommodation": 0.0,
+            "food": 0.0,
+            "ticket": 0.0,
+            "parking": 0.0,
+            "other": 0.0,
+            "per_person": null
+          },
           "photos": [],
           "tags": [],
           "pitfalls": [],
+          "pitfall_categories": [],
           "highlights": [],
-          "rating": null
+          "rating": null,
+          "road_condition_score": 2,
+          "driving_difficulty": "困难"
         },
         {
-          "event_id": "rest_2bea1d4c",
+          "event_id": "rest_a13a2372",
           "timestamp": "2025-10-03T14:20:00",
           "event_type": "rest",
           "title": "成都",
@@ -633,27 +897,152 @@
           "toll_cost": 0.0,
           "other_cost": 0.0,
           "total_cost": 0.0,
+          "cost_breakdown": {
+            "accommodation": 0.0,
+            "food": 0.0,
+            "ticket": 0.0,
+            "parking": 0.0,
+            "other": 0.0,
+            "per_person": null
+          },
           "photos": [],
           "tags": [
             "重点"
           ],
           "pitfalls": [],
+          "pitfall_categories": [],
           "highlights": [],
-          "rating": 4
+          "rating": 4,
+          "road_condition_score": null,
+          "driving_difficulty": null
         }
       ],
       "start_location": "康定",
       "end_location": "成都",
       "total_distance_km": 178.0,
       "total_duration_hours": 5.2,
-      "total_cost": 0.0,
-      "weather": ""
+      "total_cost": 158.0,
+      "cost_breakdown": {
+        "fuel": 0.0,
+        "toll": 158.0,
+        "accommodation": 0.0,
+        "food": 0.0,
+        "ticket": 0.0,
+        "parking": 0.0,
+        "other": 0.0
+      },
+      "weather": "",
+      "photo_count": 0,
+      "driving_difficulty_avg": "困难"
     }
   ],
   "template_style": "pitfalls",
   "vehicle_info": {},
+  "photo_spots": [
+    {
+      "name": "四姑娘山",
+      "day": 1,
+      "time": "10:15",
+      "latitude": 31.1,
+      "longitude": 102.9,
+      "photo_count": 0,
+      "grade": "A",
+      "highlights": [
+        "到四姑娘山镇了，找了个观景台停，太震撼！ #拍照 云海雪山尽收眼底",
+        "四姑娘山双桥沟入口，门票+观光车150元/人，推荐大家坐最里面那班车往回走 #攻略",
+        "午餐在镇上吃的藏家土火锅，168元/人，味道不错分量足 #午餐 #推荐"
+      ],
+      "tips": [
+        "沟里有很多拍照点，红杉林、布达拉峰都很棒，注意防晒紫外线强！ #避坑"
+      ]
+    },
+    {
+      "name": "拍照打卡",
+      "day": 1,
+      "time": "20:30",
+      "latitude": null,
+      "longitude": null,
+      "photo_count": 0,
+      "grade": "A",
+      "highlights": [
+        "夜里看星空，无光污染，银河肉眼可见 #推荐 #拍照"
+      ],
+      "tips": []
+    },
+    {
+      "name": "丹巴甲居藏寨",
+      "day": 2,
+      "time": "08:00",
+      "latitude": 30.85,
+      "longitude": 101.93,
+      "photo_count": 0,
+      "grade": "A",
+      "highlights": [
+        "早起拍藏寨日出，晨雾炊烟太美了 #拍照 #推荐"
+      ],
+      "tips": []
+    },
+    {
+      "name": "下午观景停留",
+      "day": 1,
+      "time": "15:15",
+      "latitude": 30.88,
+      "longitude": 102.22,
+      "photo_count": 0,
+      "grade": "B",
+      "highlights": [],
+      "tips": []
+    },
+    {
+      "name": "新都桥",
+      "day": 2,
+      "time": "10:50",
+      "latitude": 30.06,
+      "longitude": 101.493,
+      "photo_count": 0,
+      "grade": "B",
+      "highlights": [],
+      "tips": [
+        "折多山垭口停车要停正规停车场，别停路边会被贴罚单 #避坑 停车费20元"
+      ]
+    }
+  ],
+  "pitfalls_by_category": {
+    "路况坑": [
+      "开始盘山了，弯多弯急，新手司机小心 #路况",
+      "继续往丹巴方向，路窄弯多，有一段落石区注意快速通过 #危险 #避坑",
+      "折多山垭口4298米，风大温度低，注意保暖 #路况",
+      "折多山垭口停车要停正规停车场，别停路边会被贴罚单 #避坑 停车费20元"
+    ],
+    "餐饮坑": [
+      "晚餐吃的藏式石板烧，味道一般有点贵，人均120元，不推荐 #避坑 #晚餐"
+    ],
+    "拍照坑": [
+      "沟里有很多拍照点，红杉林、布达拉峰都很棒，注意防晒紫外线强！ #避坑"
+    ]
+  },
+  "road_scores": {
+    "overall_avg": 3.12,
+    "segment_count": 8,
+    "difficulty_distribution": {
+      "简单": 4,
+      "中等": 1,
+      "困难": 2,
+      "地狱": 1
+    },
+    "by_day": {
+      "1": 2.67,
+      "2": 3.33,
+      "3": 3.5
+    },
+    "traffic_jam_count": 1,
+    "traffic_jam_minutes": 110
+  },
   "meta": {
-    "source": "roadtrip-planner v0.1.0",
+    "source": "roadtrip-planner v0.2.0",
+    "total_waypoints": 78,
+    "total_photos": 0,
+    "total_notes": 26,
     "template_stats": {
       "total_events": 21,
       "key_points": [
@@ -666,13 +1055,68 @@
         "成都"
       ]
     },
-    "all_pitfalls": [
-      "开始盘山了，弯多弯急，新手司机小心 #路况",
-      "沟里有很多拍照点，红杉林、布达拉峰都很棒，注意防晒紫外线强！ #避坑",
-      "继续往丹巴方向，路窄弯多，有一段落石区注意快速通过 #危险 #避坑",
-      "晚餐吃的藏式石板烧，味道一般有点贵，人均120，不推荐 #避坑 #晚餐",
-      "折多山垭口4298米，风大温度低，注意保暖 #路况",
-      "折多山垭口停车要停正规停车场，别停路边会被贴罚单 #避坑 停车费20"
-    ]
+    "pitfalls_rich": {
+      "路况坑": [
+        {
+          "day": 1,
+          "time": "07:30",
+          "event": "早晨出发",
+          "event_type": "departure",
+          "content": "开始盘山了，弯多弯急，新手司机小心 #路况"
+        },
+        {
+          "day": 1,
+          "time": "13:10",
+          "event": "堵车",
+          "event_type": "traffic_jam",
+          "content": "继续往丹巴方向，路窄弯多，有一段落石区注意快速通过 #危险 #避坑"
+        },
+        {
+          "day": 2,
+          "time": "08:45",
+          "event": "上午行驶",
+          "event_type": "driving",
+          "content": "折多山垭口4298米，风大温度低，注意保暖 #路况"
+        },
+        {
+          "day": 2,
+          "time": "10:50",
+          "event": "新都桥",
+          "event_type": "scenic_stop",
+          "content": "折多山垭口停车要停正规停车场，别停路边会被贴罚单 #避坑 停车费20元"
+        }
+      ],
+      "餐饮坑": [
+        {
+          "day": 1,
+          "time": "17:00",
+          "event": "丹巴甲居藏寨",
+          "event_type": "hotel_checkin",
+          "content": "晚餐吃的藏式石板烧，味道一般有点贵，人均120元，不推荐 #避坑 #晚餐"
+        }
+      ],
+      "拍照坑": [
+        {
+          "day": 1,
+          "time": "10:15",
+          "event": "四姑娘山",
+          "event_type": "photo",
+          "content": "沟里有很多拍照点，红杉林、布达拉峰都很棒，注意防晒紫外线强！ #避坑"
+        }
+      ]
+    },
+    "pitfalls_summary": {
+      "total": 6,
+      "by_category": {
+        "路况坑": 4,
+        "餐饮坑": 1,
+        "拍照坑": 1
+      },
+      "by_day": {
+        "1": 4,
+        "2": 2,
+        "3": 0
+      }
+    }
   }
 }

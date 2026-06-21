@@ -1,0 +1,144 @@
+{
+  "destinations_count": 7,
+  "destinations_details": [
+    {
+      "order": 1,
+      "name": "川西小环线自驾游",
+      "latitude": null,
+      "longitude": null,
+      "description_length": 0
+    },
+    {
+      "order": 2,
+      "name": "成都",
+      "latitude": 30.5728,
+      "longitude": 104.0668,
+      "description_length": 36
+    },
+    {
+      "order": 3,
+      "name": "四姑娘山",
+      "latitude": 31.1,
+      "longitude": 102.9,
+      "description_length": 70
+    },
+    {
+      "order": 4,
+      "name": "丹巴甲居藏寨",
+      "latitude": 30.85,
+      "longitude": 101.93,
+      "description_length": 58
+    },
+    {
+      "order": 5,
+      "name": "新都桥",
+      "latitude": 30.05,
+      "longitude": 101.49,
+      "description_length": 39
+    },
+    {
+      "order": 6,
+      "name": "康定",
+      "latitude": 30.058,
+      "longitude": 101.961,
+      "description_length": 45
+    },
+    {
+      "order": 7,
+      "name": "成都（终点）",
+      "latitude": null,
+      "longitude": null,
+      "description_length": 12
+    }
+  ],
+  "gps_points_count": 78,
+  "gps_date_range": [
+    "2025-10-01 07:30",
+    "2025-10-03 14:20"
+  ],
+  "gps_estimated_km": 627.4,
+  "photos_total": 0,
+  "photos_with_timestamp": 0,
+  "photos_with_gps": 0,
+  "photos_missing_timestamp": [],
+  "notes_total": 26,
+  "notes_with_timestamp": 26,
+  "notes_without_timestamp": [],
+  "notes_unmatched_to_gps": [],
+  "cost_matches_preview": [
+    {
+      "category": "fuel_cost",
+      "amount": 420.0,
+      "evidence": "油费420元"
+    },
+    {
+      "category": "toll_cost",
+      "amount": 65.0,
+      "evidence": "过路费65元"
+    },
+    {
+      "category": "food_cost",
+      "amount": 150.0,
+      "evidence": "150元/人"
+    },
+    {
+      "category": "ticket_cost",
+      "amount": 150.0,
+      "evidence": "观光车150元"
+    },
+    {
+      "category": "food_cost",
+      "amount": 168.0,
+      "evidence": "168元/人"
+    },
+    {
+      "category": "accommodation_cost",
+      "amount": 380.0,
+      "evidence": "380元/晚"
+    },
+    {
+      "category": "ticket_cost",
+      "amount": 50.0,
+      "evidence": "门票50元"
+    },
+    {
+      "category": "food_cost",
+      "amount": 120.0,
+      "evidence": "人均120"
+    },
+    {
+      "category": "parking_cost",
+      "amount": 20.0,
+      "evidence": "停车费20元"
+    },
+    {
+      "category": "food_cost",
+      "amount": 60.0,
+      "evidence": "人均60"
+    },
+    {
+      "category": "accommodation_cost",
+      "amount": 420.0,
+      "evidence": "420元/晚"
+    },
+    {
+      "category": "parking_cost",
+      "amount": 420.0,
+      "evidence": "停车: 420元"
+    },
+    {
+      "category": "food_cost",
+      "amount": 90.0,
+      "evidence": "人均90"
+    },
+    {
+      "category": "toll_cost",
+      "amount": 158.0,
+      "evidence": "过路费158元"
+    }
+  ],
+  "warnings": [
+    "未找到照片，建议补充 JPG/PNG 素材以生成拍照点清单"
+  ],
+  "summary": "7个目的地 / 78轨迹点 / 0张照片 / 26条备注 · 预估里程627km · 共识别14处金额"
+}
