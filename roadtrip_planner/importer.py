@@ -914,6 +914,23 @@ class RoadbookAssembler:
                         best = d
                 if best is not None and best_dist < 50:
                     return best.name
+            haystack = " ".join([event.description or ""] + (event.highlights or []))
+            if haystack:
+                for d in self.destinations:
+                    if d.name and len(d.name) >= 3 and d.name in haystack:
+                        return d.name
+                for kw in ["折多山", "巴郎山", "贡嘎", "四姑娘山", "丹巴", "甲居藏寨", "新都桥",
+                           "塔公", "康定", "泸定", "成都", "汶川", "卧龙", "耿达"]:
+                    if kw in haystack:
+                        return kw
+                if "星空" in haystack or "银河" in haystack:
+                    return "星空拍摄点"
+                if "日出" in haystack:
+                    return "日出观景点"
+                if "日落" in haystack:
+                    return "日落观景点"
+                if "云海" in haystack:
+                    return "云海观景台"
             if event.title:
                 return event.title
             return "观景停留"
@@ -1027,13 +1044,33 @@ class PrecheckReport:
     photos_with_timestamp: int = 0
     photos_with_gps: int = 0
     photos_missing_timestamp: List[str] = field(default_factory=list)
+    photos_unmatched_to_route: List[Dict[str, Any]] = field(default_factory=list)
     notes_total: int = 0
     notes_with_timestamp: int = 0
     notes_without_timestamp: List[str] = field(default_factory=list)
     notes_unmatched_to_gps: List[Dict[str, Any]] = field(default_factory=list)
+    notes_with_cost_detected: List[Dict[str, Any]] = field(default_factory=list)
     cost_matches_preview: List[Dict[str, Any]] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)
     summary: str = ""
+
+    @property
+    def detected_costs_count(self) -> int:
+        return len(self.notes_with_cost_detected)
+
+    @property
+    def unmatched_notes_count(self) -> int:
+        return len(self.notes_unmatched_to_gps)
+
+    @property
+    def detected_costs(self) -> List[str]:
+        return [f"[{n.get('time','?')}] {n.get('content','')[:50]}  →  {n.get('cost_summary','')}"
+                for n in self.notes_with_cost_detected]
+
+    @property
+    def unmatched_notes(self) -> List[str]:
+        return [f"[{n.get('time','?')}] {n.get('content','')[:50]}"
+                for n in self.notes_unmatched_to_gps]
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -1046,10 +1083,14 @@ class PrecheckReport:
             "photos_with_timestamp": self.photos_with_timestamp,
             "photos_with_gps": self.photos_with_gps,
             "photos_missing_timestamp": self.photos_missing_timestamp,
+            "photos_unmatched_to_route": self.photos_unmatched_to_route,
             "notes_total": self.notes_total,
             "notes_with_timestamp": self.notes_with_timestamp,
             "notes_without_timestamp": self.notes_without_timestamp,
             "notes_unmatched_to_gps": self.notes_unmatched_to_gps,
+            "notes_with_cost_detected": self.notes_with_cost_detected,
+            "detected_costs_count": self.detected_costs_count,
+            "unmatched_notes_count": self.unmatched_notes_count,
             "cost_matches_preview": self.cost_matches_preview,
             "warnings": self.warnings,
             "summary": self.summary,
@@ -1080,13 +1121,26 @@ class PrecheckReport:
             lines.append(f"   ⚠️  缺少时间戳 ({len(self.photos_missing_timestamp)}张):")
             for p in self.photos_missing_timestamp[:10]:
                 lines.append(f"      - {p}")
+        if self.photos_unmatched_to_route:
+            lines.append(f"   ⚠️  未匹配到路线 ({len(self.photos_unmatched_to_route)}张):")
+            for p in self.photos_unmatched_to_route[:8]:
+                t = p.get("time", "?")
+                lines.append(f"      - [{t}] {p.get('filename','')}")
         lines.append("")
         lines.append(f"📝 文字备注: {self.notes_total} 条")
         lines.append(f"   含时间戳: {self.notes_with_timestamp} / {self.notes_total}")
         if self.notes_unmatched_to_gps:
             lines.append(f"   ⚠️  无法匹配到 GPS 轨迹 ({len(self.notes_unmatched_to_gps)}条):")
             for n in self.notes_unmatched_to_gps[:10]:
-                lines.append(f"      - [{n.get('time','?')}] {n.get('content','')[:30]}...")
+                lines.append(f"      - [{n.get('time','?')}] {n.get('content','')[:50]}")
+        if self.notes_with_cost_detected:
+            lines.append("")
+            lines.append(f"✅ 已识别费用的备注 ({len(self.notes_with_cost_detected)}条):")
+            for n in self.notes_with_cost_detected[:15]:
+                t = n.get("time", "?")
+                summary = n.get("cost_summary", "")
+                content = (n.get("content", "") or "")[:40]
+                lines.append(f"      - [{t}] {content}  →  {summary}")
         lines.append("")
         if self.cost_matches_preview:
             lines.append(f"💰 识别到的金额 (预览 {len(self.cost_matches_preview)} 条):")
@@ -1183,11 +1237,55 @@ def build_precheck_report(destinations_file: str = "", gps_file: str = "",
                 })
         report.notes_unmatched_to_gps = unmatched
     cost_preview = []
+    notes_with_cost = []
     for n in notes:
         costs = extract_costs(n.content, n.tags)
         for rec in costs.get("matches", []):
             cost_preview.append(rec)
+        if costs.get("matches"):
+            parts = []
+            if costs.get("fuel_cost"): parts.append(f"油费¥{costs['fuel_cost']:.0f}")
+            if costs.get("toll_cost"): parts.append(f"过路¥{costs['toll_cost']:.0f}")
+            if costs.get("accommodation_cost"): parts.append(f"住宿¥{costs['accommodation_cost']:.0f}")
+            if costs.get("food_cost"): parts.append(f"餐饮¥{costs['food_cost']:.0f}")
+            if costs.get("ticket_cost"): parts.append(f"门票¥{costs['ticket_cost']:.0f}")
+            if costs.get("parking_cost"): parts.append(f"停车¥{costs['parking_cost']:.0f}")
+            if costs.get("other_cost"): parts.append(f"其他¥{costs['other_cost']:.0f}")
+            if costs.get("per_person"): parts.append(f"人均¥{costs['per_person']:.0f}")
+            notes_with_cost.append({
+                "time": n.timestamp.strftime("%Y-%m-%d %H:%M") if n.timestamp else "",
+                "content": n.content[:200],
+                "tags": n.tags or [],
+                "cost_summary": " + ".join(parts),
+                "cost_detail": {k: v for k, v in costs.items() if k != "matches"},
+            })
     report.cost_matches_preview = cost_preview[:20]
+    report.notes_with_cost_detected = notes_with_cost
+    photos_unmatched = []
+    if waypoints_sorted and photos_dir and os.path.isdir(photos_dir):
+        t_start = waypoints_sorted[0].timestamp
+        t_end = waypoints_sorted[-1].timestamp
+        from .utils import parse_datetime
+        for fp in photos_raw:
+            try:
+                from PIL import Image, ExifTags
+                with Image.open(fp) as img:
+                    exif = img._getexif() if hasattr(img, "_getexif") else None
+                    dt_str = None
+                    if exif:
+                        exif_dict = {ExifTags.TAGS.get(k, k): v for k, v in exif.items()}
+                        dt_str = exif_dict.get("DateTimeOriginal") or exif_dict.get("DateTime")
+                    if dt_str:
+                        dt = parse_datetime(dt_str)
+                        if dt and not (t_start <= dt <= t_end):
+                            photos_unmatched.append({
+                                "filename": os.path.basename(fp),
+                                "time": dt.strftime("%Y-%m-%d %H:%M"),
+                                "path": fp,
+                            })
+            except Exception:
+                continue
+    report.photos_unmatched_to_route = photos_unmatched
     warnings = []
     if report.destinations_count == 0:
         warnings.append("未找到目的地，请检查 destinations 文件路径或格式（应为 ## 开头的 Markdown）")

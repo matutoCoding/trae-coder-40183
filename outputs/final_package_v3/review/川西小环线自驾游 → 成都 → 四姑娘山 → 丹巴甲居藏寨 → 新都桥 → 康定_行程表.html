@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>川西小环线自驾游 → 成都 → 四姑娘山 → 丹巴甲居藏寨 → 新都桥 → 康定 → 成都（终点）｜深度测评版</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+        background:#f5f6f8; color:#222; padding:20px; }
+.container { max-width:1200px; margin:0 auto; }
+.header { background:linear-gradient(135deg,#3b82f6,#8b5cf6); color:#fff;
+          padding:28px 32px; border-radius:12px; margin-bottom:20px; }
+.header-guide { background:linear-gradient(135deg,#0ea5e9,#10b981); }
+.header-review { background:linear-gradient(135deg,#f97316,#ef4444); }
+.header-pitfalls { background:linear-gradient(135deg,#6366f1,#8b5cf6); }
+.header h1 { font-size:26px; margin-bottom:8px; }
+.header .sub { font-size:14px; opacity:.9; }
+.stats { display:flex; gap:16px; flex-wrap:wrap; margin-top:16px; }
+.stat { background:rgba(255,255,255,.18); padding:10px 16px; border-radius:8px;
+         font-size:14px; }
+.section { background:#fff; border-radius:12px; padding:24px; margin-bottom:20px;
+            box-shadow:0 1px 3px rgba(0,0,0,.06); }
+.section h2 { font-size:18px; margin-bottom:16px; color:#1e293b;
+              padding-bottom:10px; border-bottom:2px solid #e2e8f0; }
+.day-title { font-size:16px; color:#3b82f6; margin:18px 0 10px;
+              display:flex; align-items:center; gap:8px; }
+.day-title .chip { background:#3b82f6; color:#fff; font-size:12px;
+                    padding:3px 10px; border-radius:999px; }
+.summary { background:#f8fafc; border-left:3px solid #3b82f6;
+            padding:10px 14px; font-size:13px; color:#475569; margin-bottom:12px;
+            border-radius:4px; }
+table { width:100%; border-collapse:collapse; font-size:13px; }
+th, td { padding:10px 12px; text-align:left; border-bottom:1px solid #e2e8f0;
+          vertical-align:top; }
+th { background:#f1f5f9; color:#334155; font-weight:600; }
+tr:hover td { background:#f8fafc; }
+.tag { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px;
+        margin-right:4px; }
+.tag-重点 { background:#fee2e2; color:#b91c1c; }
+.tag-驾驶 { background:#dbeafe; color:#1d4ed8; }
+.tag-拍照 { background:#fce7f3; color:#be185d; }
+.tag-餐饮 { background:#fef3c7; color:#b45309; }
+.tag-住宿 { background:#ddd6fe; color:#6d28d9; }
+.cost { color:#16a34a; font-weight:600; }
+.download { display:inline-block; background:#3b82f6; color:#fff;
+             padding:8px 18px; border-radius:6px; text-decoration:none;
+             font-size:13px; margin-right:8px; }
+.download:hover { background:#2563eb; }
+.footer { text-align:center; color:#94a3b8; font-size:12px; padding:20px; }
+.budget-mini { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:20px; }
+.budget-card { flex:1; min-width:130px; background:#fff; border-radius:10px; padding:14px 16px;
+                box-shadow:0 1px 3px rgba(0,0,0,.06); border-top:3px solid #3b82f6; }
+.budget-card .label { font-size:12px; color:#64748b; margin-bottom:4px; }
+.budget-card .value { font-size:20px; font-weight:700; color:#1e293b; }
+.budget-card .value .unit { font-size:12px; color:#64748b; font-weight:400; margin-left:2px; }
+.budget-card.fuel { border-top-color:#f97316; }
+.budget-card.toll { border-top-color:#8b5cf6; }
+.budget-card.stay { border-top-color:#0ea5e9; }
+.budget-card.food { border-top-color:#f59e0b; }
+.budget-card.ticket { border-top-color:#10b981; }
+.budget-card.park { border-top-color:#6366f1; }
+.section.summary-block { background:#f0fdf4; border:1px solid #bbf7d0; }
+.section.review-block { background:#fff7ed; border:1px solid #fed7aa; }
+.section.pitfalls-block { background:#eef2ff; border:1px solid #c7d2fe; }
+.chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+.chip { display:inline-block; padding:3px 10px; border-radius:999px; font-size:11px;
+         font-weight:500; }
+.chip-green { background:#dcfce7; color:#166534; }
+.chip-yellow { background:#fef9c3; color:#854d0e; }
+.chip-red { background:#fee2e2; color:#991b1b; }
+.chip-blue { background:#dbeafe; color:#1e40af; }
+.chip-purple { background:#ede9fe; color:#5b21b6; }
+.chip-orange { background:#ffedd5; color:#9a3412; }
+.pitfalls-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+                   gap:12px; margin-top:12px; }
+.pitfall-card { background:#fff; border-radius:10px; padding:14px 16px;
+                  border-left:4px solid #ef4444; box-shadow:0 1px 2px rgba(0,0,0,.05); }
+.pitfall-card .phead { font-weight:600; font-size:13px; margin-bottom:6px; color:#991b1b; }
+.pitfall-card .plist { font-size:12px; color:#475569; line-height:1.7; }
+.pitfall-card.费用坑 { border-left-color:#ea580c; }
+.pitfall-card.路况坑 { border-left-color:#dc2626; }
+.pitfall-card.住宿坑 { border-left-color:#7c3aed; }
+.pitfall-card.餐饮坑 { border-left-color:#d97706; }
+.pitfall-card.拍照坑 { border-left-color:#db2777; }
+.pitfall-card.其他坑 { border-left-color:#64748b; }
+.photo-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+                gap:12px; margin-top:12px; }
+.photo-item { background:#fff; border-radius:10px; padding:14px;
+                box-shadow:0 1px 2px rgba(0,0,0,.05); }
+.photo-item .plevel { font-size:11px; font-weight:700; margin-bottom:4px; }
+.photo-item .plevel.S { color:#dc2626; }
+.photo-item .plevel.A { color:#ea580c; }
+.photo-item .plevel.B { color:#ca8a04; }
+.photo-item .ptitle { font-weight:600; font-size:13px; margin-bottom:6px; }
+.photo-item .pmeta { font-size:11px; color:#64748b; line-height:1.6; }
+.road-stars { color:#f59e0b; letter-spacing:2px; font-size:13px; }
+.diff-badge { display:inline-block; padding:2px 8px; border-radius:4px; font-size:11px;
+                font-weight:600; }
+.diff-简单 { background:#dcfce7; color:#166534; }
+.diff-中等 { background:#fef9c3; color:#854d0e; }
+.diff-困难 { background:#fed7aa; color:#9a3412; }
+.diff-地狱 { background:#fee2e2; color:#991b1b; }
+.cost-detail { font-size:11px; line-height:1.8; color:#334155; }
+.cost-detail .line { display:flex; justify-content:space-between; gap:8px; }
+.cost-detail .k { color:#64748b; }
+.cost-detail .v { font-weight:600; white-space:nowrap; }
+.download-alt { display:inline-block; background:#64748b; color:#fff;
+                  padding:8px 18px; border-radius:6px; text-decoration:none;
+                  font-size:13px; margin-right:8px; }
+.download-alt:hover { background:#475569; }
+@media(max-width:640px){
+    table { font-size:12px; } th,td { padding:6px 8px; }
+    .hide-sm { display:none; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header header-review">
+  <h1>🚗 川西小环线自驾游 → 成都 → 四姑娘山 → 丹巴甲居藏寨 → 新都桥 → 康定 → 成都（终点）｜深度测评版</h1>
+  <div class="sub">老司机实测的深度测评行程表</div>
+  <div class="stats">
+    <div class="stat">📅 3 天</div>
+    <div class="stat">🛣 541.9 km</div>
+    <div class="stat">💰 约 ¥2101</div>
+    <div class="stat">🎯 7 个目的地</div>
+  </div>
+</div>
+
+<div class="budget-mini">
+  <div class="budget-card fuel">
+    <div class="label">⛽ 油费</div><div class="value">420<span class="unit">元</span></div>
+  </div>
+  <div class="budget-card toll">
+    <div class="label">🛣 过路费</div><div class="value">223<span class="unit">元</span></div>
+  </div>
+  <div class="budget-card stay">
+    <div class="label">🏨 住宿</div><div class="value">800<span class="unit">元</span></div>
+  </div>
+  <div class="budget-card food">
+    <div class="label">🍽 餐饮</div><div class="value">438<span class="unit">元</span></div>
+  </div>
+  <div class="budget-card ticket">
+    <div class="label">🎫 门票</div><div class="value">200<span class="unit">元</span></div>
+  </div>
+  <div class="budget-card park">
+    <div class="label">🅿 停车</div><div class="value">20<span class="unit">元</span></div>
+  </div>
+        </div>
+
+<div class="section">
+  <h2>📥 下载原始数据</h2>
+  <a class="download" href="川西小环线自驾游 → 成都 → 四姑娘山 → 丹巴甲居藏寨 → 新都桥 → 康定_行程表.csv" download>⬇ 下载 CSV 行程表</a>
+  <a class="download-alt" href="川西小环线自驾游 → 成都 → 四姑娘山 → 丹巴甲居藏寨 → 新都桥 → 康定_原始数据.json" download>⬇ 下载 JSON 原始数据</a>
+</div>
+
+<div class="section review-block"><h2>🏁 路况测评总览</h2><div style="font-size:14px;line-height:2"><div><span class="road-stars">★★★☆☆</span> 整体路况 3.1/5.0</div><br><div>🏁 驾驶难度：<span class="diff-badge diff-地狱">地狱</span></div><br><div>📊 难度分布：简单 4段 / 中等 1段 / 困难 2段 / 地狱 1段</div><br><div>💸 每公里成本：约 ¥3.88</div></div></div><div class="section" style="margin-top:20px"><h2>📅 分日路况评分</h2><table><thead><tr><th>天数</th><th>路况</th><th>难度</th><th>里程</th><th>均速</th><th>拥堵</th></tr></thead><tbody><tr><td>DAY1</td><td><span class='road-stars'>★★☆☆☆</span> 2.7</td><td><span class='diff-badge diff-困难'>困难</span></td><td>214 km</td><td>40 km/h</td><td>1 次</td></tr><tr><td>DAY2</td><td><span class='road-stars'>★★★☆☆</span> 3.3</td><td><span class='diff-badge diff-地狱'>地狱</span></td><td>150 km</td><td>53 km/h</td><td>0 次</td></tr><tr><td>DAY3</td><td><span class='road-stars'>★★★☆☆</span> 3.5</td><td><span class='diff-badge diff-困难'>困难</span></td><td>178 km</td><td>42 km/h</td><td>0 次</td></tr></tbody></table></div>
+
+
+<div class="section">
+  <div class="day-title">
+    <span class="chip">DAY 1</span>
+    第 1 天 · 2025-10-01
+  </div>
+  <div class="chips"><span class="chip chip-green">💰 当日 ¥1353</span><span class="chip chip-orange">🏁 难度 困难</span></div>
+  <div class="summary">第 1 天｜2025-10-01｜里程 214.2km｜纯驾驶 4 小时 55 分钟｜平均 44km/h｜拥堵 1 段｜路况 2.7/5｜难度困难</div>
+  <table>
+    <thead><tr>
+      <th>时间</th><th>事件</th><th class="hide-sm">本段里程</th>
+      <th class="hide-sm">累计里程</th><th class="hide-sm">时长</th><th class="hide-sm">路况</th>
+      <th class="hide-sm">照片</th><th>费用明细</th><th>备注</th>
+    </tr></thead>
+    <tbody><tr>
+                    <td>07:30</td>
+                    <td><span class="tag tag-重点">重点</span><span class="tag tag-驾驶">加油</span><span class="tag tag-驾驶">过路</span>早晨出发</td>
+                    <td class="hide-sm">124.9</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">2 小时 35 分钟</td>
+                    <td class="hide-sm"><span class="road-stars">★★★★☆</span> <span class="diff-badge diff-简单">简单</span> <span style="font-size:11px;color:#64748b">48km/h</span></td>
+                    <td class="hide-sm">-</td>
+                    <td><div class="cost-detail"><div class="line"><span class="k">⛽ 油费</span><span class="v">¥420</span></div><div class="line"><span class="k">🛣 过路</span><span class="v">¥65</span></div><div class="line" style="border-top:1px dashed #e2e8f0;padding-top:3px;margin-top:3px"><span class="k"><b>合计</b></span><span class="v" style="color:#16a34a">¥485</span></div></div></td>
+                    <td><span class="chip chip-red">路况坑</span><br><br>⚠ 开始盘山了，弯多弯急，新手司机小心 #路况</td>
+                </tr><tr>
+                    <td>10:15</td>
+                    <td><span class="tag tag-拍照">拍照</span><span class="tag tag-驾驶">攻略</span><span class="tag tag-驾驶">避坑</span>四姑娘山</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">124.9</td>
+                    <td class="hide-sm">2 小时 45 分钟</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">-</td>
+                    <td><div class="cost-detail"><div class="line"><span class="k">🍽 餐饮</span><span class="v">¥168</span></div><div class="line"><span class="k">🎫 门票</span><span class="v">¥150</span></div><div class="line" style="border-top:1px dashed #e2e8f0;padding-top:3px;margin-top:3px"><span class="k"><b>合计</b></span><span class="v" style="color:#16a34a">¥318</span></div></div></td>
+                    <td><span class="chip chip-red">拍照坑</span><br><br>⚠ 沟里有很多拍照点，红杉林、布达拉峰都很棒，注意防晒紫外线强！ #避坑<br>✨ 到四姑娘山镇了，找了个观景台停，太震撼！ #拍照 云海雪山尽收眼底</td>
+                </tr><tr>
+                    <td>13:10</td>
+                    <td><span class="tag tag-重点">重点</span><span class="tag tag-驾驶">危险</span><span class="tag tag-驾驶">避坑</span>堵车</td>
+                    <td class="hide-sm">72.9</td>
+                    <td class="hide-sm">131.0</td>
+                    <td class="hide-sm">1 小时 50 分钟</td>
+                    <td class="hide-sm"><span class="road-stars">★☆☆☆☆</span> <span class="diff-badge diff-困难">困难</span> <span style="font-size:11px;color:#64748b">40km/h</span></td>
+                    <td class="hide-sm">-</td>
+                    <td>-</td>
+                    <td><span class="chip chip-red">路况坑</span><br><br>⚠ 继续往丹巴方向，路窄弯多，有一段落石区注意快速通过 #危险 #避坑</td>
+                </tr><tr>
+                    <td>15:15</td>
+                    <td><span class="tag tag-重点">重点</span><span class="tag tag-拍照">拍照</span>下午观景停留</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">197.8</td>
+                    <td class="hide-sm">45 分钟</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">-</td>
+                    <td>-</td>
+                    <td></td>
+                </tr><tr>
+                    <td>16:10</td>
+                    <td><span class="tag tag-重点">重点</span>下午行驶</td>
+                    <td class="hide-sm">16.4</td>
+                    <td class="hide-sm">201.9</td>
+                    <td class="hide-sm">30 分钟</td>
+                    <td class="hide-sm"><span class="road-stars">★★★☆☆</span> <span class="diff-badge diff-中等">中等</span> <span style="font-size:11px;color:#64748b">33km/h</span></td>
+                    <td class="hide-sm">-</td>
+                    <td>-</td>
+                    <td></td>
+                </tr><tr>
+                    <td>17:00</td>
+                    <td><span class="tag tag-重点">重点</span><span class="tag tag-住宿">住宿</span><span class="tag tag-驾驶">避坑</span>丹巴甲居藏寨</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">214.2</td>
+                    <td class="hide-sm">2 小时 30 分钟</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">-</td>
+                    <td><div class="cost-detail"><div class="line"><span class="k">🏨 住宿</span><span class="v">¥380</span></div><div class="line"><span class="k">🍽 餐饮</span><span class="v">¥120</span></div><div class="line"><span class="k">🎫 门票</span><span class="v">¥50</span></div><div class="line" style="border-top:1px dashed #e2e8f0;padding-top:3px;margin-top:3px"><span class="k"><b>合计</b></span><span class="v" style="color:#16a34a">¥550</span></div><div class="line"><span class="k">👥 人均</span><span class="v">¥120</span></div></div></td>
+                    <td><span class="chip chip-red">餐饮坑</span><br><br>⚠ 晚餐吃的藏式石板烧，味道一般有点贵，人均120元，不推荐 #避坑 #晚餐<br>✨ 晚餐吃的藏式石板烧，味道一般有点贵，人均120元，不推荐 #避坑 #晚餐</td>
+                </tr><tr>
+                    <td>20:30</td>
+                    <td><span class="tag tag-驾驶">推荐</span><span class="tag tag-拍照">拍照</span>拍照打卡</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">214.2</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">-</td>
+                    <td>-</td>
+                    <td><br>✨ 夜里看星空，无光污染，银河肉眼可见 #推荐 #拍照</td>
+                </tr></tbody>
+  </table>
+</div>
+
+<div class="section">
+  <div class="day-title">
+    <span class="chip">DAY 2</span>
+    第 2 天 · 2025-10-02
+  </div>
+  <div class="chips"><span class="chip chip-green">💰 当日 ¥590</span><span class="chip chip-orange">🏁 难度 地狱</span></div>
+  <div class="summary">第 2 天｜2025-10-02｜里程 149.7km｜纯驾驶 2 小时 57 分钟｜平均 51km/h｜拥堵 0 段｜路况 3.3/5｜难度地狱</div>
+  <table>
+    <thead><tr>
+      <th>时间</th><th>事件</th><th class="hide-sm">本段里程</th>
+      <th class="hide-sm">累计里程</th><th class="hide-sm">时长</th><th class="hide-sm">路况</th>
+      <th class="hide-sm">照片</th><th>费用明细</th><th>备注</th>
+    </tr></thead>
+    <tbody><tr>
+                    <td>08:00</td>
+                    <td><span class="tag tag-拍照">拍照</span><span class="tag tag-驾驶">推荐</span>丹巴甲居藏寨</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">214.2</td>
+                    <td class="hide-sm">15 分钟</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">-</td>
+                    <td>-</td>
+                    <td><br>✨ 早起拍藏寨日出，晨雾炊烟太美了 #拍照 #推荐</td>
+                </tr><tr>
+                    <td>08:30</td>
+                    <td><span class="tag tag-重点">重点</span><span class="tag tag-驾驶">攻略</span>早晨出发</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">223.2</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">-</td>
+                    <td>-</td>
+                    <td></td>
+                </tr><tr>
+                    <td>08:45</td>
+                    <td><span class="tag tag-重点">重点</span><span class="tag tag-驾驶">路况</span>上午行驶</td>
+                    <td class="hide-sm">88.0</td>
+                    <td class="hide-sm">232.1</td>
+                    <td class="hide-sm">1 小时 57 分钟</td>
+                    <td class="hide-sm"><span class="road-stars">★★★★☆</span> <span class="diff-badge diff-简单">简单</span> <span style="font-size:11px;color:#64748b">45km/h</span></td>
+                    <td class="hide-sm">-</td>
+                    <td>-</td>
+                    <td><span class="chip chip-red">路况坑</span><br><br>⚠ 折多山垭口4298米，风大温度低，注意保暖 #路况</td>
+                </tr><tr>
+                    <td>10:50</td>
+                    <td><span class="tag tag-重点">重点</span><span class="tag tag-驾驶">避坑</span>新都桥</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">302.1</td>
+                    <td class="hide-sm">30 分钟</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">-</td>
+                    <td><div class="cost-detail"><div class="line"><span class="k">🅿 停车</span><span class="v">¥20</span></div><div class="line" style="border-top:1px dashed #e2e8f0;padding-top:3px;margin-top:3px"><span class="k"><b>合计</b></span><span class="v" style="color:#16a34a">¥20</span></div></div></td>
+                    <td><span class="chip chip-red">路况坑</span><br><br>⚠ 折多山垭口停车要停正规停车场，别停路边会被贴罚单 #避坑 停车费20元</td>
+                </tr><tr>
+                    <td>11:30</td>
+                    <td><span class="tag tag-重点">重点</span>中午行驶</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">302.1</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm"><span class="road-stars">★☆☆☆☆</span> <span class="diff-badge diff-地狱">地狱</span></td>
+                    <td class="hide-sm">-</td>
+                    <td>-</td>
+                    <td></td>
+                </tr><tr>
+                    <td>11:45</td>
+                    <td><span class="tag tag-餐饮">午餐</span>新都桥</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">302.1</td>
+                    <td class="hide-sm">1 小时 30 分钟</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">-</td>
+                    <td><div class="cost-detail"><div class="line"><span class="k">🍽 餐饮</span><span class="v">¥60</span></div><div class="line" style="border-top:1px dashed #e2e8f0;padding-top:3px;margin-top:3px"><span class="k"><b>合计</b></span><span class="v" style="color:#16a34a">¥60</span></div><div class="line"><span class="k">👥 人均</span><span class="v">¥60</span></div></div></td>
+                    <td></td>
+                </tr><tr>
+                    <td>13:30</td>
+                    <td><span class="tag tag-重点">重点</span><span class="tag tag-驾驶">推荐</span><span class="tag tag-拍照">拍照</span>下午行驶</td>
+                    <td class="hide-sm">61.7</td>
+                    <td class="hide-sm">314.5</td>
+                    <td class="hide-sm">1 小时</td>
+                    <td class="hide-sm"><span class="road-stars">★★★★★</span> <span class="diff-badge diff-简单">简单</span> <span style="font-size:11px;color:#64748b">62km/h</span></td>
+                    <td class="hide-sm">-</td>
+                    <td>-</td>
+                    <td><br>✨ 新都桥十里画廊真的名不虚传，处处都是Windows桌面 #推荐 #拍照</td>
+                </tr><tr>
+                    <td>15:00</td>
+                    <td><span class="tag tag-住宿">住宿</span><span class="tag tag-驾驶">推荐</span><span class="tag tag-餐饮">晚餐</span>康定</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">363.9</td>
+                    <td class="hide-sm">4 小时</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">-</td>
+                    <td><div class="cost-detail"><div class="line"><span class="k">🏨 住宿</span><span class="v">¥420</span></div><div class="line"><span class="k">🍽 餐饮</span><span class="v">¥90</span></div><div class="line" style="border-top:1px dashed #e2e8f0;padding-top:3px;margin-top:3px"><span class="k"><b>合计</b></span><span class="v" style="color:#16a34a">¥510</span></div><div class="line"><span class="k">👥 人均</span><span class="v">¥90</span></div></div></td>
+                    <td><br>✨ 晚餐吃的康定本地牦牛肉汤锅，强烈推荐！人均90元 #推荐 #晚餐</td>
+                </tr><tr>
+                    <td>21:00</td>
+                    <td><span class="tag tag-驾驶">推荐</span>晚餐</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">363.9</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">-</td>
+                    <td>-</td>
+                    <td><br>✨ 康定夜景不错，溜溜城有演出可以看看 #推荐</td>
+                </tr></tbody>
+  </table>
+</div>
+
+<div class="section">
+  <div class="day-title">
+    <span class="chip">DAY 3</span>
+    第 3 天 · 2025-10-03
+  </div>
+  <div class="chips"><span class="chip chip-green">💰 当日 ¥158</span><span class="chip chip-orange">🏁 难度 困难</span></div>
+  <div class="summary">第 3 天｜2025-10-03｜里程 178.0km｜纯驾驶 3 小时 30 分钟｜平均 51km/h｜拥堵 0 段｜路况 3.5/5｜难度困难</div>
+  <table>
+    <thead><tr>
+      <th>时间</th><th>事件</th><th class="hide-sm">本段里程</th>
+      <th class="hide-sm">累计里程</th><th class="hide-sm">时长</th><th class="hide-sm">路况</th>
+      <th class="hide-sm">照片</th><th>费用明细</th><th>备注</th>
+    </tr></thead>
+    <tbody><tr>
+                    <td>07:45</td>
+                    <td><span class="tag tag-驾驶">过路</span>康定</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">363.9</td>
+                    <td class="hide-sm">15 分钟</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">-</td>
+                    <td><div class="cost-detail"><div class="line"><span class="k">🛣 过路</span><span class="v">¥158</span></div><div class="line" style="border-top:1px dashed #e2e8f0;padding-top:3px;margin-top:3px"><span class="k"><b>合计</b></span><span class="v" style="color:#16a34a">¥158</span></div></div></td>
+                    <td></td>
+                </tr><tr>
+                    <td>08:30</td>
+                    <td><span class="tag tag-重点">重点</span><span class="tag tag-驾驶">推荐</span>早晨出发</td>
+                    <td class="hide-sm">155.9</td>
+                    <td class="hide-sm">389.8</td>
+                    <td class="hide-sm">2 小时 30 分钟</td>
+                    <td class="hide-sm"><span class="road-stars">★★★★★</span> <span class="diff-badge diff-简单">简单</span> <span style="font-size:11px;color:#64748b">62km/h</span></td>
+                    <td class="hide-sm">-</td>
+                    <td>-</td>
+                    <td><br>✨ 二郎山隧道这段真的壮观，全长13公里 #推荐</td>
+                </tr><tr>
+                    <td>11:30</td>
+                    <td><span class="tag tag-餐饮">午餐</span>午餐</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">519.7</td>
+                    <td class="hide-sm">1 小时 30 分钟</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">-</td>
+                    <td>-</td>
+                    <td></td>
+                </tr><tr>
+                    <td>13:10</td>
+                    <td><span class="tag tag-重点">重点</span>下午行驶</td>
+                    <td class="hide-sm">22.1</td>
+                    <td class="hide-sm">522.9</td>
+                    <td class="hide-sm">1 小时</td>
+                    <td class="hide-sm"><span class="road-stars">★★☆☆☆</span> <span class="diff-badge diff-困难">困难</span> <span style="font-size:11px;color:#64748b">22km/h</span></td>
+                    <td class="hide-sm">-</td>
+                    <td>-</td>
+                    <td></td>
+                </tr><tr>
+                    <td>14:20</td>
+                    <td><span class="tag tag-重点">重点</span>成都</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">541.8</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">-</td>
+                    <td class="hide-sm">-</td>
+                    <td>-</td>
+                    <td></td>
+                </tr></tbody>
+  </table>
+</div>
+
+<div class="footer">由 Roadtrip Planner 生成 · 2026-06-22 07:13</div>
+</div>
+</body>
+</html>

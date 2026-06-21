@@ -1,0 +1,340 @@
+{
+  "destinations_count": 7,
+  "destinations_details": [
+    {
+      "order": 1,
+      "name": "川西小环线自驾游",
+      "latitude": null,
+      "longitude": null,
+      "description_length": 0
+    },
+    {
+      "order": 2,
+      "name": "成都",
+      "latitude": 30.5728,
+      "longitude": 104.0668,
+      "description_length": 36
+    },
+    {
+      "order": 3,
+      "name": "四姑娘山",
+      "latitude": 31.1,
+      "longitude": 102.9,
+      "description_length": 70
+    },
+    {
+      "order": 4,
+      "name": "丹巴甲居藏寨",
+      "latitude": 30.85,
+      "longitude": 101.93,
+      "description_length": 58
+    },
+    {
+      "order": 5,
+      "name": "新都桥",
+      "latitude": 30.05,
+      "longitude": 101.49,
+      "description_length": 39
+    },
+    {
+      "order": 6,
+      "name": "康定",
+      "latitude": 30.058,
+      "longitude": 101.961,
+      "description_length": 45
+    },
+    {
+      "order": 7,
+      "name": "成都（终点）",
+      "latitude": null,
+      "longitude": null,
+      "description_length": 12
+    }
+  ],
+  "gps_points_count": 78,
+  "gps_date_range": [
+    "2025-10-01 07:30",
+    "2025-10-03 14:20"
+  ],
+  "gps_estimated_km": 627.4,
+  "photos_total": 0,
+  "photos_with_timestamp": 0,
+  "photos_with_gps": 0,
+  "photos_missing_timestamp": [],
+  "photos_unmatched_to_route": [],
+  "notes_total": 26,
+  "notes_with_timestamp": 26,
+  "notes_without_timestamp": [],
+  "notes_unmatched_to_gps": [],
+  "notes_with_cost_detected": [
+    {
+      "time": "2025-10-01 07:30",
+      "content": "早晨从成都出发，天气不错，加满了油，油费420元 #加油",
+      "tags": [
+        "加油"
+      ],
+      "cost_summary": "油费¥420",
+      "cost_detail": {
+        "fuel_cost": 420.0,
+        "toll_cost": 0.0,
+        "accommodation_cost": 0.0,
+        "food_cost": 0.0,
+        "ticket_cost": 0.0,
+        "parking_cost": 0.0,
+        "other_cost": 0.0,
+        "per_person": null
+      }
+    },
+    {
+      "time": "2025-10-01 08:15",
+      "content": "走成灌高速转都汶高速，路况很好，油耗大概8.2L/百公里，成灌高速过路费65元 #过路",
+      "tags": [
+        "过路"
+      ],
+      "cost_summary": "过路¥65",
+      "cost_detail": {
+        "fuel_cost": 0.0,
+        "toll_cost": 65.0,
+        "accommodation_cost": 0.0,
+        "food_cost": 0.0,
+        "ticket_cost": 0.0,
+        "parking_cost": 0.0,
+        "other_cost": 0.0,
+        "per_person": null
+      }
+    },
+    {
+      "time": "2025-10-01 10:40",
+      "content": "四姑娘山双桥沟入口，门票+观光车150元/人，推荐大家坐最里面那班车往回走 #攻略",
+      "tags": [
+        "攻略"
+      ],
+      "cost_summary": "门票¥150",
+      "cost_detail": {
+        "fuel_cost": 0.0,
+        "toll_cost": 0.0,
+        "accommodation_cost": 0.0,
+        "food_cost": 0.0,
+        "ticket_cost": 150.0,
+        "parking_cost": 0.0,
+        "other_cost": 0.0,
+        "per_person": null
+      }
+    },
+    {
+      "time": "2025-10-01 12:15",
+      "content": "午餐在镇上吃的藏家土火锅，168元/人，味道不错分量足 #午餐 #推荐",
+      "tags": [
+        "午餐",
+        "推荐"
+      ],
+      "cost_summary": "餐饮¥168",
+      "cost_detail": {
+        "fuel_cost": 0.0,
+        "toll_cost": 0.0,
+        "accommodation_cost": 0.0,
+        "food_cost": 168.0,
+        "ticket_cost": 0.0,
+        "parking_cost": 0.0,
+        "other_cost": 0.0,
+        "per_person": null
+      }
+    },
+    {
+      "time": "2025-10-01 17:00",
+      "content": "到达丹巴甲居藏寨，门票50元，民宿老板来接，住的3号楼观景房380元/晚 #住宿",
+      "tags": [
+        "住宿"
+      ],
+      "cost_summary": "住宿¥380 + 门票¥50",
+      "cost_detail": {
+        "fuel_cost": 0.0,
+        "toll_cost": 0.0,
+        "accommodation_cost": 380.0,
+        "food_cost": 0.0,
+        "ticket_cost": 50.0,
+        "parking_cost": 0.0,
+        "other_cost": 0.0,
+        "per_person": null
+      }
+    },
+    {
+      "time": "2025-10-01 19:30",
+      "content": "晚餐吃的藏式石板烧，味道一般有点贵，人均120元，不推荐 #避坑 #晚餐",
+      "tags": [
+        "避坑",
+        "晚餐"
+      ],
+      "cost_summary": "餐饮¥120 + 人均¥120",
+      "cost_detail": {
+        "fuel_cost": 0.0,
+        "toll_cost": 0.0,
+        "accommodation_cost": 0.0,
+        "food_cost": 120.0,
+        "ticket_cost": 0.0,
+        "parking_cost": 0.0,
+        "other_cost": 0.0,
+        "per_person": 120.0
+      }
+    },
+    {
+      "time": "2025-10-02 10:50",
+      "content": "折多山垭口停车要停正规停车场，别停路边会被贴罚单 #避坑 停车费20元",
+      "tags": [
+        "避坑"
+      ],
+      "cost_summary": "停车¥20",
+      "cost_detail": {
+        "fuel_cost": 0.0,
+        "toll_cost": 0.0,
+        "accommodation_cost": 0.0,
+        "food_cost": 0.0,
+        "ticket_cost": 0.0,
+        "parking_cost": 20.0,
+        "other_cost": 0.0,
+        "per_person": null
+      }
+    },
+    {
+      "time": "2025-10-02 11:45",
+      "content": "到新都桥了，找了家川菜馆午餐，味道正宗人均60元 #午餐",
+      "tags": [
+        "午餐"
+      ],
+      "cost_summary": "餐饮¥60 + 人均¥60",
+      "cost_detail": {
+        "fuel_cost": 0.0,
+        "toll_cost": 0.0,
+        "accommodation_cost": 0.0,
+        "food_cost": 60.0,
+        "ticket_cost": 0.0,
+        "parking_cost": 0.0,
+        "other_cost": 0.0,
+        "per_person": 60.0
+      }
+    },
+    {
+      "time": "2025-10-02 15:00",
+      "content": "到达康定，住溜溜城附近的酒店，420元/晚，停车方便 #住宿",
+      "tags": [
+        "住宿"
+      ],
+      "cost_summary": "住宿¥420",
+      "cost_detail": {
+        "fuel_cost": 0.0,
+        "toll_cost": 0.0,
+        "accommodation_cost": 420.0,
+        "food_cost": 0.0,
+        "ticket_cost": 0.0,
+        "parking_cost": 0.0,
+        "other_cost": 0.0,
+        "per_person": null
+      }
+    },
+    {
+      "time": "2025-10-02 18:30",
+      "content": "晚餐吃的康定本地牦牛肉汤锅，强烈推荐！人均90元 #推荐 #晚餐",
+      "tags": [
+        "推荐",
+        "晚餐"
+      ],
+      "cost_summary": "餐饮¥90 + 人均¥90",
+      "cost_detail": {
+        "fuel_cost": 0.0,
+        "toll_cost": 0.0,
+        "accommodation_cost": 0.0,
+        "food_cost": 90.0,
+        "ticket_cost": 0.0,
+        "parking_cost": 0.0,
+        "other_cost": 0.0,
+        "per_person": 90.0
+      }
+    },
+    {
+      "time": "2025-10-03 07:45",
+      "content": "出发回成都，走雅康高速，新高速路况超好，雅康高速过路费158元 #过路",
+      "tags": [
+        "过路"
+      ],
+      "cost_summary": "过路¥158",
+      "cost_detail": {
+        "fuel_cost": 0.0,
+        "toll_cost": 158.0,
+        "accommodation_cost": 0.0,
+        "food_cost": 0.0,
+        "ticket_cost": 0.0,
+        "parking_cost": 0.0,
+        "other_cost": 0.0,
+        "per_person": null
+      }
+    }
+  ],
+  "detected_costs_count": 11,
+  "unmatched_notes_count": 0,
+  "cost_matches_preview": [
+    {
+      "category": "fuel_cost",
+      "amount": 420.0,
+      "evidence": "油费420元"
+    },
+    {
+      "category": "toll_cost",
+      "amount": 65.0,
+      "evidence": "过路费65元"
+    },
+    {
+      "category": "ticket_cost",
+      "amount": 150.0,
+      "evidence": "观光车150元"
+    },
+    {
+      "category": "food_cost",
+      "amount": 168.0,
+      "evidence": "168元/人"
+    },
+    {
+      "category": "accommodation_cost",
+      "amount": 380.0,
+      "evidence": "380元/晚"
+    },
+    {
+      "category": "ticket_cost",
+      "amount": 50.0,
+      "evidence": "门票50元"
+    },
+    {
+      "category": "food_cost",
+      "amount": 120.0,
+      "evidence": "人均120"
+    },
+    {
+      "category": "parking_cost",
+      "amount": 20.0,
+      "evidence": "停车费20元"
+    },
+    {
+      "category": "food_cost",
+      "amount": 60.0,
+      "evidence": "人均60"
+    },
+    {
+      "category": "accommodation_cost",
+      "amount": 420.0,
+      "evidence": "420元/晚"
+    },
+    {
+      "category": "food_cost",
+      "amount": 90.0,
+      "evidence": "人均90"
+    },
+    {
+      "category": "toll_cost",
+      "amount": 158.0,
+      "evidence": "过路费158元"
+    }
+  ],
+  "warnings": [
+    "未找到照片，建议补充 JPG/PNG 素材以生成拍照点清单"
+  ],
+  "summary": "7个目的地 / 78轨迹点 / 0张照片 / 26条备注 · 预估里程627km · 共识别12处金额"
+}
